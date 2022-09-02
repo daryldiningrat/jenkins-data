@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 6286:
+/***/ 186:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -15,16 +15,16 @@ function createElementFromHtml(html) {
 function toId(string) {
   return string.trim().replace(/[\W_]+/g, "-").toLowerCase();
 }
-// EXTERNAL MODULE: ./node_modules/jquery/dist/jquery.js
-var jquery = __webpack_require__(9755);
+// EXTERNAL MODULE: ./.yarn/cache/jquery-npm-3.6.1-6f29087f48-6177d866a7.zip/node_modules/jquery/dist/jquery.js
+var jquery = __webpack_require__(4655);
 var jquery_default = /*#__PURE__*/__webpack_require__.n(jquery);
-// EXTERNAL MODULE: ./node_modules/window-handle/index.js
-var window_handle = __webpack_require__(6615);
+// EXTERNAL MODULE: ./.yarn/cache/window-handle-npm-1.0.1-369b8e9cbe-8f2c183a0d.zip/node_modules/window-handle/index.js
+var window_handle = __webpack_require__(30);
 ;// CONCATENATED MODULE: ./src/main/js/util/page.js
 
 
 var timestamp = new Date().getTime();
-var loadedClass = 'jenkins-loaded-' + timestamp;
+var loadedClass = "jenkins-loaded-" + timestamp;
 /**
  * Wait for the specified element to be added to the DOM.
  * <p>
@@ -63,19 +63,19 @@ function winScrollTop() {
 }
 
 function onWinScroll(callback) {
-  jquery_default()((0,window_handle.getWindow)()).on('scroll', callback);
+  jquery_default()((0,window_handle.getWindow)()).on("scroll", callback);
 }
 
 function pageHeaderHeight() {
-  return elementHeight('#page-header') + breadcrumbBarHeight();
+  return elementHeight("#page-header") + breadcrumbBarHeight();
 }
 
 function breadcrumbBarHeight() {
-  return elementHeight('#breadcrumbBar');
+  return elementHeight("#breadcrumbBar");
 }
 
 function removeTextHighlighting(selector) {
-  jquery_default()('span.highlight-split', selector).each(function () {
+  jquery_default()("span.highlight-split", selector).each(function () {
     var highlightSplit = jquery_default()(this);
     highlightSplit.before(highlightSplit.text());
     highlightSplit.remove();
@@ -115,7 +115,7 @@ window.addEventListener("load", function () {
       const headerToScrollTo = document.getElementById(item.querySelector(".task-link").dataset.sectionId);
       document.documentElement.scrollTop = i === 0 ? 0 : headerToScrollTo.getBoundingClientRect().top + window.scrollY - 70;
     });
-    sidebar.insertAdjacentElement('beforeend', item);
+    sidebar.insertAdjacentElement("beforeend", item);
   }); // TODO - Remove when Matrix-Project plugin has been updated to only have one enable/disable project toggle
   // Having multiple toggles on the same page for the same field corrupts submission for that field, so
   // remove all but the first
@@ -326,7 +326,7 @@ function onScroll() {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(6286); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(186); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

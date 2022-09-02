@@ -2,12 +2,12 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 1411:
+/***/ 9383:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9755);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4655);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var jenkins_js_modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3701);
+/* harmony import */ var jenkins_js_modules__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(563);
 
 
 /*
@@ -20,8 +20,8 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
 });
 
 function loadScripts() {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.jenkins-js-load').each(function () {
-    var scriptUrl = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data-src');
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".jenkins-js-load").each(function () {
+    var scriptUrl = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr("data-src");
 
     if (scriptUrl) {
       // jsModules.addScript will ensure that the script is
@@ -34,8 +34,8 @@ function loadScripts() {
 }
 
 function loadCSS() {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.jenkins-css-load').each(function () {
-    var cssUrl = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data-src');
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".jenkins-css-load").each(function () {
+    var cssUrl = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr("data-src");
 
     if (cssUrl) {
       // jsModules.addCSSToPage will ensure that the CSS is
@@ -224,7 +224,7 @@ function loadCSS() {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(1411); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(9383); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

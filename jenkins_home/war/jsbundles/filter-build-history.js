@@ -2,25 +2,25 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 725:
+/***/ 3580:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3279);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(875);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
 
 const buildHistoryContainer = document.getElementById("buildHistory");
-const pageSearchInputContainer = buildHistoryContainer.querySelector('.build-search-row .jenkins-search');
-const pageSearchInput = buildHistoryContainer.querySelector('.build-search-row input');
+const pageSearchInputContainer = buildHistoryContainer.querySelector(".build-search-row .jenkins-search");
+const pageSearchInput = buildHistoryContainer.querySelector(".build-search-row input");
 const buildHistoryPage = document.getElementById("buildHistoryPage");
 const properties = document.getElementById("properties");
 const ajaxUrl = buildHistoryPage.getAttribute("page-ajax");
 const nextBuild = properties.getAttribute("page-next-build");
 const noBuildsBanner = document.getElementById("no-builds");
-const sidePanel = document.getElementById('side-panel');
-const buildHistoryPageNav = document.getElementById('buildHistoryPageNav');
-const pageOne = buildHistoryPageNav.querySelectorAll('.pageOne')[0];
-const pageUp = buildHistoryPageNav.querySelectorAll('.pageUp')[0];
-const pageDown = buildHistoryPageNav.querySelectorAll('.pageDown')[0];
+const sidePanel = document.getElementById("side-panel");
+const buildHistoryPageNav = document.getElementById("buildHistoryPageNav");
+const pageOne = buildHistoryPageNav.querySelectorAll(".pageOne")[0];
+const pageUp = buildHistoryPageNav.querySelectorAll(".pageUp")[0];
+const pageDown = buildHistoryPageNav.querySelectorAll(".pageDown")[0];
 const leftRightPadding = 4;
 const updateBuildsRefreshInterval = 5000;
 
@@ -32,7 +32,7 @@ function updateBuilds() {
         var dataTable = getDataTable(buildHistoryContainer);
         var rows = dataTable.rows; // Check there are no existing rows (except the search bar) before showing the no builds banner
 
-        if (rows.length <= 1 && rsp.responseText === "<table class=\"pane\"></table>") {
+        if (rows.length <= 1 && rsp.responseText === '<table class="pane"></table>') {
           noBuildsBanner.style.display = "block";
         } else {
           noBuildsBanner.style.display = "none";
@@ -41,16 +41,16 @@ function updateBuilds() {
 
         var firstBuildRow = 0;
 
-        if (rows[firstBuildRow].classList.contains('build-search-row')) {
+        if (rows[firstBuildRow].classList.contains("build-search-row")) {
           firstBuildRow++;
         }
 
-        while (rows.length > 1 && rows[firstBuildRow].classList.contains('transitive')) {
+        while (rows.length > 1 && rows[firstBuildRow].classList.contains("transitive")) {
           Element.remove(rows[firstBuildRow]);
         } // insert new rows
 
 
-        var div = document.createElement('div');
+        var div = document.createElement("div");
         div.innerHTML = rsp.responseText;
         Behaviour.applySubtree(div);
         var pivot = rows[firstBuildRow];
@@ -68,8 +68,8 @@ function updateBuilds() {
           }
         }
 
-        if (newDataTable.classList.contains('hasPageData')) {
-          buildHistoryPage.setAttribute('page-entry-newest', newDataTable.getAttribute('page-entry-newest'));
+        if (newDataTable.classList.contains("hasPageData")) {
+          buildHistoryPage.setAttribute("page-entry-newest", newDataTable.getAttribute("page-entry-newest"));
         } // next update
 
 
@@ -98,42 +98,42 @@ function cancelRefreshTimeout() {
 }
 
 function hasPageUp() {
-  return buildHistoryPage.getAttribute('page-has-up') === 'true';
+  return buildHistoryPage.getAttribute("page-has-up") === "true";
 }
 
 function hasPageDown() {
-  return buildHistoryPage.getAttribute('page-has-down') === 'true';
+  return buildHistoryPage.getAttribute("page-has-down") === "true";
 }
 
 function getNewestEntryId() {
-  return buildHistoryPage.getAttribute('page-entry-newest');
+  return buildHistoryPage.getAttribute("page-entry-newest");
 }
 
 function getOldestEntryId() {
-  return buildHistoryPage.getAttribute('page-entry-oldest');
+  return buildHistoryPage.getAttribute("page-entry-oldest");
 }
 
 function getDataTable(buildHistoryDiv) {
-  return $(buildHistoryDiv).getElementsBySelector('table.pane')[0];
+  return $(buildHistoryDiv).getElementsBySelector("table.pane")[0];
 }
 
 function updatePageParams(dataTable) {
-  buildHistoryPage.setAttribute('page-has-up', dataTable.getAttribute('page-has-up'));
-  buildHistoryPage.setAttribute('page-has-down', dataTable.getAttribute('page-has-down'));
-  buildHistoryPage.setAttribute('page-entry-newest', dataTable.getAttribute('page-entry-newest'));
-  buildHistoryPage.setAttribute('page-entry-oldest', dataTable.getAttribute('page-entry-oldest'));
+  buildHistoryPage.setAttribute("page-has-up", dataTable.getAttribute("page-has-up"));
+  buildHistoryPage.setAttribute("page-has-down", dataTable.getAttribute("page-has-down"));
+  buildHistoryPage.setAttribute("page-entry-newest", dataTable.getAttribute("page-entry-newest"));
+  buildHistoryPage.setAttribute("page-entry-oldest", dataTable.getAttribute("page-entry-oldest"));
 }
 
 function togglePageUpDown() {
-  buildHistoryPageNav.classList.remove('hasUpPage');
-  buildHistoryPageNav.classList.remove('hasDownPage');
+  buildHistoryPageNav.classList.remove("hasUpPage");
+  buildHistoryPageNav.classList.remove("hasDownPage");
 
   if (hasPageUp()) {
-    buildHistoryPageNav.classList.add('hasUpPage');
+    buildHistoryPageNav.classList.add("hasUpPage");
   }
 
   if (hasPageDown()) {
-    buildHistoryPageNav.classList.add('hasDownPage');
+    buildHistoryPageNav.classList.add("hasDownPage");
   }
 }
 
@@ -142,31 +142,31 @@ function checkRowCellOverflows(row) {
     return;
   }
 
-  if (row.classList.contains('overflow-checked')) {
+  if (row.classList.contains("overflow-checked")) {
     // already done.
     return;
   }
 
   function markSingleline() {
-    row.classList.add('single-line');
-    row.classList.remove('multi-line');
+    row.classList.add("single-line");
+    row.classList.remove("multi-line");
   }
 
   function markMultiline() {
-    row.classList.remove('single-line');
-    row.classList.add('multi-line');
+    row.classList.remove("single-line");
+    row.classList.add("multi-line");
   }
 
   function indentMultiline(element) {
-    element.classList.add('indent-multiline');
+    element.classList.add("indent-multiline");
   }
 
   function blockWrap(el1, el2) {
-    var div = document.createElement('div');
-    div.classList.add('block');
-    div.classList.add('wrap');
-    el1.classList.add('wrapped');
-    el2.classList.add('wrapped');
+    var div = document.createElement("div");
+    div.classList.add("block");
+    div.classList.add("wrap");
+    el1.classList.add("wrapped");
+    el2.classList.add("wrapped");
     el1.parentNode.insertBefore(div, el1);
     el1.parentNode.removeChild(el1);
     el2.parentNode.removeChild(el2);
@@ -176,28 +176,28 @@ function checkRowCellOverflows(row) {
   }
 
   function blockUnwrap(element) {
-    var wrapped = $(element).getElementsBySelector('.wrapped');
+    var wrapped = $(element).getElementsBySelector(".wrapped");
 
     for (var i = 0; i < wrapped.length; i++) {
       var wrappedEl = wrapped[i];
       wrappedEl.parentNode.removeChild(wrappedEl);
       element.parentNode.insertBefore(wrappedEl, element);
-      wrappedEl.classList.remove('wrapped');
+      wrappedEl.classList.remove("wrapped");
     }
 
     element.parentNode.removeChild(element);
   }
 
-  var buildName = $(row).getElementsBySelector('.build-name')[0];
-  var buildDetails = $(row).getElementsBySelector('.build-details')[0];
+  var buildName = $(row).getElementsBySelector(".build-name")[0];
+  var buildDetails = $(row).getElementsBySelector(".build-details")[0];
 
   if (!buildName || !buildDetails) {
     return;
   }
 
-  var buildControls = $(row).getElementsBySelector('.build-controls')[0];
+  var buildControls = $(row).getElementsBySelector(".build-controls")[0];
   var desc;
-  var descElements = $(row).getElementsBySelector('.desc');
+  var descElements = $(row).getElementsBySelector(".desc");
 
   if (descElements.length > 0) {
     desc = descElements[0];
@@ -206,20 +206,20 @@ function checkRowCellOverflows(row) {
   function resetCellOverflows() {
     markSingleline(); // undo block wraps
 
-    var blockWraps = $(row).getElementsBySelector('.block.wrap');
+    var blockWraps = $(row).getElementsBySelector(".block.wrap");
 
     for (var i = 0; i < blockWraps.length; i++) {
       blockUnwrap(blockWraps[i]);
     }
 
-    buildName.classList.remove('block');
-    buildName.removeAttribute('style');
-    buildDetails.classList.remove('block');
-    buildDetails.removeAttribute('style');
+    buildName.classList.remove("block");
+    buildName.removeAttribute("style");
+    buildDetails.classList.remove("block");
+    buildDetails.removeAttribute("style");
 
     if (buildControls) {
-      buildControls.classList.remove('block');
-      buildDetails.removeAttribute('style');
+      buildControls.classList.remove("block");
+      buildDetails.removeAttribute("style");
     }
   } // Undo everything from the previous poll.
 
@@ -244,7 +244,7 @@ function checkRowCellOverflows(row) {
     if (buildControls) {
       if (element.clientHeight < buildControls.clientHeight) {
         $(element).setStyle({
-          height: buildControls.clientHeight.toString() + 'px'
+          height: buildControls.clientHeight.toString() + "px"
         });
       }
     }
@@ -252,31 +252,31 @@ function checkRowCellOverflows(row) {
 
   function setBuildControlWidths() {
     if (buildControls) {
-      var buildBadge = $(buildControls).getElementsBySelector('.build-badge')[0];
+      var buildBadge = $(buildControls).getElementsBySelector(".build-badge")[0];
 
       if (buildBadge) {
         var buildControlsWidth = buildControls.clientWidth;
         var buildBadgeWidth;
-        var buildStop = $(buildControls).getElementsBySelector('.build-stop')[0];
+        var buildStop = $(buildControls).getElementsBySelector(".build-stop")[0];
 
         if (buildStop) {
           $(buildStop).setStyle({
-            width: '24px'
+            width: "24px"
           }); // Minus 24 for the buildStop width,
           // minus 4 for left+right padding in the controls container
 
           buildBadgeWidth = buildControlsWidth - 24 - leftRightPadding;
 
-          if (buildControls.classList.contains('indent-multiline')) {
+          if (buildControls.classList.contains("indent-multiline")) {
             buildBadgeWidth = buildBadgeWidth - 20;
           }
 
           $(buildBadge).setStyle({
-            width: buildBadgeWidth + 'px'
+            width: buildBadgeWidth + "px"
           });
         } else {
           $(buildBadge).setStyle({
-            width: '100%'
+            width: "100%"
           });
         }
       }
@@ -298,7 +298,7 @@ function checkRowCellOverflows(row) {
       var badgesOverflowing = false;
       var nameLessThanHalf = true;
       var detailsLessThanHalf = true;
-      var buildBadge = $(buildControls).getElementsBySelector('.build-badge')[0];
+      var buildBadge = $(buildControls).getElementsBySelector(".build-badge")[0];
 
       if (buildBadge) {
         var badgeOverflowParams = getElementOverflowParams(buildBadge);
@@ -318,10 +318,10 @@ function checkRowCellOverflows(row) {
       function expandLeftWithRight(leftCellOverFlowParams, rightCellOverflowParams) {
         // Float them left and right...
         $(leftCellOverFlowParams.element).setStyle({
-          float: 'left'
+          float: "left"
         });
         $(rightCellOverflowParams.element).setStyle({
-          float: 'right'
+          float: "right"
         });
 
         if (!leftCellOverFlowParams.isOverflowed && !rightCellOverflowParams.isOverflowed) {
@@ -331,14 +331,14 @@ function checkRowCellOverflows(row) {
 
         if (leftCellOverFlowParams.isOverflowed && !rightCellOverflowParams.isOverflowed) {
           $(leftCellOverFlowParams.element).setStyle({
-            width: leftCellOverFlowParams.scrollWidth + 'px'
+            width: leftCellOverFlowParams.scrollWidth + "px"
           });
           return;
         }
 
         if (!leftCellOverFlowParams.isOverflowed && rightCellOverflowParams.isOverflowed) {
           $(rightCellOverflowParams.element).setStyle({
-            width: rightCellOverflowParams.scrollWidth + 'px'
+            width: rightCellOverflowParams.scrollWidth + "px"
           });
           return;
         }
@@ -349,11 +349,11 @@ function checkRowCellOverflows(row) {
         // to a row of its own (second row) by making it a block element, forcing it to wrap. If there
         // are controls, we move them up to position them after the build name by inserting before the
         // build details.
-        buildDetails.classList.add('block');
+        buildDetails.classList.add("block");
         buildControls.parentNode.removeChild(buildControls);
         buildDetails.parentNode.insertBefore(buildControls, buildDetails);
         var wrap = blockWrap(buildName, buildControls);
-        wrap.classList.add('build-name-controls');
+        wrap.classList.add("build-name-controls");
         indentMultiline(buildDetails);
         nameOverflowParams = getElementOverflowParams(buildName); // recalculate
 
@@ -364,10 +364,10 @@ function checkRowCellOverflows(row) {
         // Build details and controls can go on one row. Need to make the
         // build name (first field) a block element, forcing the details and controls to wrap
         // onto the next row (creating a second row).
-        buildName.classList.add('block');
+        buildName.classList.add("block");
         wrap = blockWrap(buildDetails, buildControls);
         indentMultiline(wrap);
-        wrap.classList.add('build-details-controls');
+        wrap.classList.add("build-details-controls");
         detailsOverflowParams = getElementOverflowParams(buildDetails); // recalculate
 
         expandLeftWithRight(detailsOverflowParams, controlsOverflowParams);
@@ -375,9 +375,9 @@ function checkRowCellOverflows(row) {
         fitToControlsHeight(buildDetails);
       } else {
         // No suitable combo fits on a row. All need to go on rows of their own.
-        buildName.classList.add('block');
-        buildDetails.classList.add('block');
-        buildControls.classList.add('block');
+        buildName.classList.add("block");
+        buildDetails.classList.add("block");
+        buildControls.classList.add("block");
         indentMultiline(buildDetails);
         indentMultiline(buildControls);
         nameOverflowParams = getElementOverflowParams(buildName); // recalculate
@@ -389,14 +389,14 @@ function checkRowCellOverflows(row) {
 
       controlsRepositioned = true;
     } else {
-      buildName.classList.add('block');
-      buildDetails.classList.add('block');
+      buildName.classList.add("block");
+      buildDetails.classList.add("block");
       indentMultiline(buildDetails);
     }
   }
 
   if (buildControls && !controlsRepositioned) {
-    buildBadge = $(buildControls).getElementsBySelector('.build-badge')[0];
+    buildBadge = $(buildControls).getElementsBySelector(".build-badge")[0];
 
     if (buildBadge) {
       badgeOverflowParams = getElementOverflowParams(buildBadge);
@@ -404,7 +404,7 @@ function checkRowCellOverflows(row) {
       if (badgeOverflowParams.isOverflowed) {
         markMultiline();
         indentMultiline(buildControls);
-        buildControls.classList.add('block');
+        buildControls.classList.add("block");
         controlsRepositioned = true;
         setBuildControlWidths();
       }
@@ -416,7 +416,7 @@ function checkRowCellOverflows(row) {
     fitToControlsHeight(buildDetails);
   }
 
-  row.classList.add('overflow-checked');
+  row.classList.add("overflow-checked");
 }
 
 function checkAllRowCellOverflows() {
@@ -436,7 +436,7 @@ function checkAllRowCellOverflows() {
 function loadPage(params, focusOnSearch) {
   var searchString = pageSearchInput.value;
 
-  if (searchString !== '') {
+  if (searchString !== "") {
     if (params === undefined) {
       params = {};
     }
@@ -449,7 +449,7 @@ function loadPage(params, focusOnSearch) {
       pageSearchInputContainer.classList.remove("jenkins-search--loading");
       buildHistoryContainer.classList.remove("jenkins-pane--loading");
 
-      if (rsp.responseText === "<table class=\"pane\"></table>") {
+      if (rsp.responseText === '<table class="pane"></table>') {
         noBuildsBanner.style.display = "block";
       } else {
         noBuildsBanner.style.display = "none";
@@ -464,7 +464,7 @@ function loadPage(params, focusOnSearch) {
       } // insert new rows
 
 
-      var div = document.createElement('div');
+      var div = document.createElement("div");
       div.innerHTML = rsp.responseText;
       Behaviour.applySubtree(div);
       var newDataTable = getDataTable(div);
@@ -496,16 +496,20 @@ const handleFilter = function () {
 const debouncedFilter = lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default()(handleFilter, 300);
 document.addEventListener("DOMContentLoaded", function () {
   // Apply correct styling upon filter bar text change, call API after wait
-  pageSearchInput.addEventListener('input', function () {
+  pageSearchInput.addEventListener("input", function () {
     pageSearchInputContainer.classList.add("jenkins-search--loading");
     buildHistoryContainer.classList.add("jenkins-pane--loading");
     noBuildsBanner.style.display = "none";
     debouncedFilter();
   });
-  if (isRunAsTest) return; // If the build history pane is collapsed, just return immediately and don't set up
+
+  if (isRunAsTest) {
+    return;
+  } // If the build history pane is collapsed, just return immediately and don't set up
   // the build history refresh.
 
-  if (buildHistoryContainer.hasClassName('collapsed')) {
+
+  if (buildHistoryContainer.hasClassName("collapsed")) {
     return;
   }
 
@@ -513,31 +517,31 @@ document.addEventListener("DOMContentLoaded", function () {
   createRefreshTimeout();
   checkAllRowCellOverflows(); // Show/hide the nav as the mouse moves into the sidepanel and build history.
 
-  sidePanel.observe('mouseover', function () {
-    buildHistoryPageNav.classList.add('mouseOverSidePanel');
+  sidePanel.observe("mouseover", function () {
+    buildHistoryPageNav.classList.add("mouseOverSidePanel");
   });
-  sidePanel.observe('mouseout', function () {
-    buildHistoryPageNav.classList.remove('mouseOverSidePanel');
+  sidePanel.observe("mouseout", function () {
+    buildHistoryPageNav.classList.remove("mouseOverSidePanel");
   });
-  buildHistoryContainer.observe('mouseover', function () {
-    buildHistoryPageNav.classList.add('mouseOverSidePanelBuildHistory');
+  buildHistoryContainer.observe("mouseover", function () {
+    buildHistoryPageNav.classList.add("mouseOverSidePanelBuildHistory");
   });
-  buildHistoryContainer.observe('mouseout', function () {
-    buildHistoryPageNav.classList.remove('mouseOverSidePanelBuildHistory');
+  buildHistoryContainer.observe("mouseout", function () {
+    buildHistoryPageNav.classList.remove("mouseOverSidePanelBuildHistory");
   });
-  pageOne.observe('click', function () {
+  pageOne.observe("click", function () {
     loadPage();
   });
-  pageUp.observe('click', function () {
+  pageUp.observe("click", function () {
     loadPage({
-      'newer-than': getNewestEntryId()
+      "newer-than": getNewestEntryId()
     });
   });
-  pageDown.observe('click', function () {
+  pageDown.observe("click", function () {
     if (hasPageDown()) {
       cancelRefreshTimeout();
       loadPage({
-        'older-than': getOldestEntryId()
+        "older-than": getOldestEntryId()
       });
     } else {
       // wrap back around to the top
@@ -724,7 +728,7 @@ document.addEventListener("DOMContentLoaded", function () {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(725); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(3580); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

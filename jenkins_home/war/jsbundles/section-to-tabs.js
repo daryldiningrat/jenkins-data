@@ -37,7 +37,7 @@ tabPanes.forEach((tabPane, index) => {
   tab.append(tabLink);
   tabBar.append(tab);
 });
-content.insertBefore(tabBar, content.children[0]);
+content.insertBefore(tabBar, tabPanes[0]);
 /******/ })()
 ;
 //# sourceMappingURL=section-to-tabs.js.map
