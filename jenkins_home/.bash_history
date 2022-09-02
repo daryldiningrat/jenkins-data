@@ -17,3 +17,26 @@ cat /tmp/script.sh
 exit
 cat /tmp/script.sh 
 exit
+ssh remote_user@remote_host
+ssh remote_user@remote_host
+ping remote-host
+ping remote_host
+curl remote_host
+exit
+exit
+ssh remote_user@remote_host
+exit
+ping remote_host
+exit
+ssh remote_user@remote_host
+cd /tmp/
+ls
+cd ..
+exit
+ssh -i remote-key remote_user@remote_host
+exit
+exit
+exit
+ssh -i remote-key remote_user@remote_host
+exit
+exit

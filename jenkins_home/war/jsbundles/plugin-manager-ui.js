@@ -1,25 +1,25 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 8376:
+/***/ 8620:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/lodash/debounce.js
-var debounce = __webpack_require__(3279);
+// EXTERNAL MODULE: ./.yarn/cache/lodash-npm-4.17.21-6382451519-eb835a2e51.zip/node_modules/lodash/debounce.js
+var debounce = __webpack_require__(875);
 var debounce_default = /*#__PURE__*/__webpack_require__.n(debounce);
 // EXTERNAL MODULE: ./src/main/js/templates/plugin-manager/available.hbs
-var available = __webpack_require__(3075);
+var available = __webpack_require__(7070);
 var available_default = /*#__PURE__*/__webpack_require__.n(available);
-// EXTERNAL MODULE: ./node_modules/jquery/dist/jquery.js
-var jquery = __webpack_require__(9755);
+// EXTERNAL MODULE: ./.yarn/cache/jquery-npm-3.6.1-6f29087f48-6177d866a7.zip/node_modules/jquery/dist/jquery.js
+var jquery = __webpack_require__(4655);
 var jquery_default = /*#__PURE__*/__webpack_require__.n(jquery);
-// EXTERNAL MODULE: ./node_modules/window-handle/index.js
-var window_handle = __webpack_require__(6615);
-// EXTERNAL MODULE: ./node_modules/handlebars/runtime.js
-var runtime = __webpack_require__(202);
-var runtime_default = /*#__PURE__*/__webpack_require__.n(runtime);
+// EXTERNAL MODULE: ./.yarn/cache/window-handle-npm-1.0.1-369b8e9cbe-8f2c183a0d.zip/node_modules/window-handle/index.js
+var window_handle = __webpack_require__(30);
+// EXTERNAL MODULE: ./.yarn/cache/handlebars-npm-4.7.7-a9ccfabf80-1e79a43f5e.zip/node_modules/handlebars/dist/cjs/handlebars.runtime.js
+var handlebars_runtime = __webpack_require__(9856);
+var handlebars_runtime_default = /*#__PURE__*/__webpack_require__.n(handlebars_runtime);
 ;// CONCATENATED MODULE: ./src/main/js/util/jenkins.js
 /**
  * Jenkins JS Modules common utility functions
@@ -31,10 +31,10 @@ var debug = false;
 var jenkins = {}; // gets the base Jenkins URL including context path
 
 jenkins.baseUrl = function () {
-  var u = jquery_default()('head').attr('data-rooturl');
+  var u = jquery_default()("head").attr("data-rooturl");
 
   if (!u) {
-    u = '';
+    u = "";
   }
 
   return u;
@@ -94,14 +94,14 @@ jenkins.goTo = function (url) {
 
 jenkins.get = function (url, success, options) {
   if (debug) {
-    console.log('get: ' + url);
+    console.log("get: " + url);
   }
 
   var args = {
     url: jenkins.baseUrl() + url,
-    type: 'GET',
+    type: "GET",
     cache: false,
-    dataType: 'json',
+    dataType: "json",
     success: success
   };
 
@@ -119,7 +119,7 @@ jenkins.get = function (url, success, options) {
 
 jenkins.post = function (url, data, success, options) {
   if (debug) {
-    console.log('post: ' + url);
+    console.log("post: " + url);
   } // handle crumbs
 
 
@@ -127,9 +127,9 @@ jenkins.post = function (url, data, success, options) {
   var wnd = window_handle.getWindow();
   var crumb;
 
-  if ('crumb' in options) {
+  if ("crumb" in options) {
     crumb = options.crumb;
-  } else if ('crumb' in wnd) {
+  } else if ("crumb" in wnd) {
     crumb = wnd.crumb;
   }
 
@@ -150,9 +150,9 @@ jenkins.post = function (url, data, success, options) {
 
   var args = {
     url: jenkins.baseUrl() + url,
-    type: 'POST',
+    type: "POST",
     cache: false,
-    dataType: 'json',
+    dataType: "json",
     data: formBody,
     contentType: "application/json",
     success: success,
@@ -171,7 +171,7 @@ jenkins.post = function (url, data, success, options) {
 
 
 jenkins.initHandlebars = function () {
-  return (runtime_default());
+  return (handlebars_runtime_default());
 };
 /**
  * Load translations for the given bundle ID, provide the message object to the handler.
@@ -180,18 +180,18 @@ jenkins.initHandlebars = function () {
 
 
 jenkins.loadTranslations = function (bundleName, handler, onError) {
-  jenkins.get('/i18n/resourceBundle?baseName=' + bundleName, function (res) {
-    if (res.status !== 'ok') {
+  jenkins.get("/i18n/resourceBundle?baseName=" + bundleName, function (res) {
+    if (res.status !== "ok") {
       if (onError) {
         onError(res.message);
       }
 
-      throw 'Unable to load localization data: ' + res.message;
+      throw "Unable to load localization data: " + res.message;
     }
 
     var translations = res.data;
 
-    if ('undefined' !== typeof Proxy) {
+    if ("undefined" !== typeof Proxy) {
       translations = new Proxy(translations, {
         get: function (target, property) {
           if (property in target) {
@@ -218,21 +218,21 @@ jenkins.loadTranslations = function (bundleName, handler, onError) {
 jenkins.testConnectivity = function (siteId, handler) {
   // check the connectivity api
   var testConnectivity = function () {
-    jenkins.get('/updateCenter/connectionStatus?siteId=' + siteId, function (response) {
-      if (response.status !== 'ok') {
+    jenkins.get("/updateCenter/connectionStatus?siteId=" + siteId, function (response) {
+      if (response.status !== "ok") {
         handler(false, true, response.message);
       } // Define statuses, which need additional check iteration via async job on the Jenkins master
       // Statuses like "OK" or "SKIPPED" are considered as fine.
 
 
-      var uncheckedStatuses = ['PRECHECK', 'CHECKING', 'UNCHECKED'];
+      var uncheckedStatuses = ["PRECHECK", "CHECKING", "UNCHECKED"];
 
       if (uncheckedStatuses.indexOf(response.data.updatesite) >= 0 || uncheckedStatuses.indexOf(response.data.internet) >= 0) {
         setTimeout(testConnectivity, 100);
       } else {
         // Update site should be always reachable, but we do not require the internet connection
         // if it's explicitly skipped by the update center
-        if (response.status !== 'ok' || response.data.updatesite !== 'OK' || response.data.internet !== 'OK' && response.data.internet !== 'SKIPPED') {
+        if (response.status !== "ok" || response.data.updatesite !== "OK" || response.data.internet !== "OK" && response.data.internet !== "SKIPPED") {
           // no connectivity, but not fatal
           handler(false, false);
         } else {
@@ -242,7 +242,7 @@ jenkins.testConnectivity = function (siteId, handler) {
     }, {
       error: function (xhr, textStatus, errorThrown) {
         if (xhr.status === 403) {
-          jenkins.goTo('/login');
+          jenkins.goTo("/login");
         } else {
           handler.call({
             isError: true,
@@ -263,9 +263,9 @@ jenkins.testConnectivity = function (siteId, handler) {
 jenkins.getWindow = function ($form) {
   $form = jquery_default()($form);
   var wnd = window_handle.getWindow();
-  jquery_default()(top.document).find('iframe').each(function () {
+  jquery_default()(top.document).find("iframe").each(function () {
     var windowFrame = this.contentWindow;
-    var $f = jquery_default()(this).contents().find('form');
+    var $f = jquery_default()(this).contents().find("form");
     $f.each(function () {
       if ($form[0] === this) {
         wnd = windowFrame;
@@ -286,13 +286,13 @@ jenkins.buildFormPost = function ($form) {
 
   if (wnd.buildFormTree(form)) {
     return $form.serialize() + "&" + jquery_default().param({
-      'core:apply': '',
-      'Submit': 'Save',
-      'json': $form.find('input[name=json]').val()
+      "core:apply": "",
+      Submit: "Save",
+      json: $form.find("input[name=json]").val()
     });
   }
 
-  return '';
+  return "";
 };
 /**
  * Gets the crumb, if crumbs are enabled
@@ -316,7 +316,7 @@ jenkins.staplerPost = function (url, $form, success, options) {
   var crumb = jenkins.getFormCrumb($form);
   jenkins.post(url, postBody, success, jquery_default().extend({
     processData: false,
-    contentType: 'application/x-www-form-urlencoded',
+    contentType: "application/x-www-form-urlencoded",
     crumb: crumb
   }, options));
 };
@@ -332,8 +332,8 @@ var plugins;
 var pluginManager = {};
 
 pluginManager.initialPluginList = function (handler) {
-  util_jenkins.get('/setupWizard/platformPluginList', function (response) {
-    if (response.status !== 'ok') {
+  util_jenkins.get("/setupWizard/platformPluginList", function (response) {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         data: response.data
@@ -431,11 +431,11 @@ pluginManager.recommendedPluginNames = function () {
 
 
 pluginManager.installPlugins = function (plugins, handler) {
-  util_jenkins.post('/pluginManager/installPlugins', {
+  util_jenkins.post("/pluginManager/installPlugins", {
     dynamicLoad: true,
     plugins: plugins
   }, function (response) {
-    if (response.status !== 'ok') {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -464,14 +464,14 @@ pluginManager.installPlugins = function (plugins, handler) {
 
 
 pluginManager.installStatus = function (handler, correlationId) {
-  var url = '/updateCenter/installStatus';
+  var url = "/updateCenter/installStatus";
 
   if (correlationId !== undefined) {
-    url += '?correlationId=' + correlationId;
+    url += "?correlationId=" + correlationId;
   }
 
   util_jenkins.get(url, function (response) {
-    if (response.status !== 'ok') {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -502,8 +502,8 @@ pluginManager.installStatus = function (handler, correlationId) {
 
 
 pluginManager.availablePlugins = function (handler) {
-  util_jenkins.get('/pluginManager/plugins', function (response) {
-    if (response.status !== 'ok') {
+  util_jenkins.get("/pluginManager/plugins", function (response) {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -526,8 +526,8 @@ pluginManager.availablePlugins = function (handler) {
 };
 
 pluginManager.availablePluginsSearch = function (query, limit, handler) {
-  util_jenkins.get('/pluginManager/pluginsSearch?query=' + query + '&limit=' + limit, function (response) {
-    if (response.status !== 'ok') {
+  util_jenkins.get("/pluginManager/pluginsSearch?query=" + query + "&limit=" + limit, function (response) {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -556,14 +556,14 @@ pluginManager.availablePluginsSearch = function (query, limit, handler) {
 
 
 pluginManager.incompleteInstallStatus = function (handler, correlationId) {
-  var url = '/updateCenter/incompleteInstallStatus';
+  var url = "/updateCenter/incompleteInstallStatus";
 
   if (correlationId !== undefined) {
-    url += '?correlationId=' + correlationId;
+    url += "?correlationId=" + correlationId;
   }
 
   util_jenkins.get(url, function (response) {
-    if (response.status !== 'ok') {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -590,7 +590,7 @@ pluginManager.incompleteInstallStatus = function (handler, correlationId) {
 
 
 pluginManager.completeInstall = function (handler) {
-  util_jenkins.post('/setupWizard/completeInstall', {}, function () {
+  util_jenkins.post("/setupWizard/completeInstall", {}, function () {
     handler.call({
       isError: false
     });
@@ -610,7 +610,7 @@ pluginManager.completeInstall = function (handler) {
 
 
 pluginManager.getRestartStatus = function (handler) {
-  util_jenkins.get('/setupWizard/restartStatus', function (response) {
+  util_jenkins.get("/setupWizard/restartStatus", function (response) {
     handler.call({
       isError: false
     }, response.data);
@@ -630,7 +630,7 @@ pluginManager.getRestartStatus = function (handler) {
 
 
 pluginManager.installPluginsDone = function (handler) {
-  util_jenkins.post('/pluginManager/installPluginsDone', {}, function () {
+  util_jenkins.post("/pluginManager/installPluginsDone", {}, function () {
     handler();
   }, {
     timeout: pluginManagerErrorTimeoutMillis,
@@ -648,7 +648,7 @@ pluginManager.installPluginsDone = function (handler) {
 
 
 pluginManager.restartJenkins = function (handler) {
-  util_jenkins.post('/updateCenter/safeRestart', {}, function () {
+  util_jenkins.post("/updateCenter/safeRestart", {}, function () {
     handler.call({
       isError: false
     });
@@ -672,26 +672,26 @@ pluginManager.restartJenkins = function (handler) {
 function applyFilter(searchQuery) {
   // debounce reduces number of server side calls while typing
   api_pluginManager.availablePluginsSearch(searchQuery.toLowerCase().trim(), 50, function (plugins) {
-    var pluginsTable = document.getElementById('plugins');
-    var tbody = pluginsTable.querySelector('tbody');
-    var admin = pluginsTable.dataset.hasadmin === 'true';
+    var pluginsTable = document.getElementById("plugins");
+    var tbody = pluginsTable.querySelector("tbody");
+    var admin = pluginsTable.dataset.hasadmin === "true";
     var selectedPlugins = [];
-    var filterInput = document.getElementById('filter-box');
+    var filterInput = document.getElementById("filter-box");
     filterInput.parentElement.classList.remove("jenkins-search--loading");
 
     function clearOldResults() {
       if (!admin) {
-        tbody.innerHTML = '';
+        tbody.innerHTML = "";
       } else {
-        var rows = tbody.querySelectorAll('tr');
+        var rows = tbody.querySelectorAll("tr");
 
         if (rows) {
           selectedPlugins = [];
           rows.forEach(function (row) {
-            var input = row.querySelector('input');
+            var input = row.querySelector("input");
 
             if (input.checked === true) {
-              var pluginName = input.name.split('.')[1];
+              var pluginName = input.name.split(".")[1];
               selectedPlugins.push(pluginName);
             } else {
               row.remove();
@@ -706,7 +706,7 @@ function applyFilter(searchQuery) {
       plugins: plugins.filter(plugin => selectedPlugins.indexOf(plugin.name) === -1),
       admin
     });
-    tbody.insertAdjacentHTML('beforeend', rows);
+    tbody.insertAdjacentHTML("beforeend", rows);
   });
 }
 
@@ -716,8 +716,8 @@ var handleFilter = function (e) {
 
 var debouncedFilter = debounce_default()(handleFilter, 150);
 document.addEventListener("DOMContentLoaded", function () {
-  var filterInput = document.getElementById('filter-box');
-  filterInput.addEventListener('input', function (e) {
+  var filterInput = document.getElementById("filter-box");
+  filterInput.addEventListener("input", function (e) {
     debouncedFilter(e);
     filterInput.parentElement.classList.add("jenkins-search--loading");
   });
@@ -730,125 +730,189 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /***/ }),
 
-/***/ 3075:
+/***/ 7070:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "    <tr data-plugin-id=\""
-    + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"name") : depth0), depth0))
     + "\" data-plugin-version=\""
-    + alias2(alias1((depth0 != null ? depth0.version : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"version") : depth0), depth0))
     + "\">\n"
-    + ((stack1 = helpers["if"].call(depth0,((stack1 = (data && data.root)) && stack1.admin),{"name":"if","hash":{},"fn":this.program(2, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,((stack1 = (data && lookupProperty(data,"root"))) && lookupProperty(stack1,"admin")),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":3,"column":8},"end":{"line":10,"column":15}}})) != null ? stack1 : "")
     + "        <td>\n            <div>\n                <a href=\""
-    + alias2(alias1((depth0 != null ? depth0.wiki : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"wiki") : depth0), depth0))
     + "\" class=\"jenkins-table__link\" target=\"_blank\" rel=\"noopener noreferrer\">\n                    "
-    + alias2(alias1((depth0 != null ? depth0.displayName : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"displayName") : depth0), depth0))
     + "\n                    <span class=\"jenkins-visually-hidden\">Version</span>\n                    <span class=\"jenkins-label jenkins-label--tertiary\" style=\"margin-left: 1ch;\">"
-    + alias2(alias1((depth0 != null ? depth0.version : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"version") : depth0), depth0))
     + "</span>\n                </a>\n            </div>\n"
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.categories : depth0),{"name":"if","hash":{},"fn":this.program(4, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.excerpt : depth0),{"name":"if","hash":{},"fn":this.program(7, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.newerCoreRequired : depth0),{"name":"if","hash":{},"fn":this.program(9, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.unresolvedSecurityWarnings : depth0),{"name":"if","hash":{},"fn":this.program(11, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.deprecated : depth0),{"name":"if","hash":{},"fn":this.program(14, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.adoptMe : depth0),{"name":"if","hash":{},"fn":this.program(16, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.newerVersionAvailableNotOffered : depth0),{"name":"if","hash":{},"fn":this.program(18, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + "        </td>\n        <td width=\"25%\">\n"
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.releaseTimestamp : depth0),{"name":"if","hash":{},"fn":this.program(20, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
-    + "        </td>\n    </tr>\n";
-},"2":function(depth0,helpers,partials,data) {
-    var alias1=this.lambda, alias2=this.escapeExpression;
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"categories") : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":19,"column":12},"end":{"line":27,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"excerpt") : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":28,"column":12},"end":{"line":32,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"newerCoreRequired") : depth0),{"name":"if","hash":{},"fn":container.program(9, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":33,"column":12},"end":{"line":37,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"unresolvedSecurityWarnings") : depth0),{"name":"if","hash":{},"fn":container.program(11, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":38,"column":12},"end":{"line":51,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"deprecated") : depth0),{"name":"if","hash":{},"fn":container.program(14, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":52,"column":12},"end":{"line":56,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"adoptMe") : depth0),{"name":"if","hash":{},"fn":container.program(16, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":57,"column":12},"end":{"line":61,"column":19}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"newerVersionAvailableNotOffered") : depth0),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":62,"column":12},"end":{"line":66,"column":19}}})) != null ? stack1 : "")
+    + "        </td>\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"releaseTimestamp") : depth0),{"name":"if","hash":{},"fn":container.program(20, data, 0),"inverse":container.program(22, data, 0),"data":data,"loc":{"start":{"line":68,"column":8},"end":{"line":76,"column":15}}})) != null ? stack1 : "")
+    + "    </tr>\n";
+},"2":function(container,depth0,helpers,partials,data) {
+    var alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "            <td class=\"jenkins-table__cell--checkbox\">\n                <span class=\"jenkins-checkbox\">\n                    <input type=\"checkbox\" name=\"plugin."
-    + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"name") : depth0), depth0))
     + "."
-    + alias2(alias1((depth0 != null ? depth0.sourceId : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"sourceId") : depth0), depth0))
     + "\" id=\"plugin."
-    + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"name") : depth0), depth0))
     + "."
-    + alias2(alias1((depth0 != null ? depth0.sourceId : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"sourceId") : depth0), depth0))
     + "\">\n                    <label for=\"plugin."
-    + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"name") : depth0), depth0))
     + "."
-    + alias2(alias1((depth0 != null ? depth0.sourceId : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"sourceId") : depth0), depth0))
     + "\"></label>\n                </span>\n            </td>\n";
-},"4":function(depth0,helpers,partials,data) {
-    var stack1;
+},"4":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"app-plugin-manager__categories\">\n"
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.categories : depth0),{"name":"each","hash":{},"fn":this.program(5, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"categories") : depth0),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":21,"column":20},"end":{"line":25,"column":29}}})) != null ? stack1 : "")
     + "                </div>\n";
-},"5":function(depth0,helpers,partials,data) {
-    var alias1=this.lambda, alias2=this.escapeExpression;
+},"5":function(container,depth0,helpers,partials,data) {
+    var alias1=container.lambda, alias2=container.escapeExpression;
 
   return "                        <a href=\"?filter="
     + alias2(alias1(depth0, depth0))
     + "\" class=\"jenkins-table__link jenkins-table__badge\">\n                        "
     + alias2(alias1(depth0, depth0))
     + "\n                        </a>\n";
-},"7":function(depth0,helpers,partials,data) {
-    var stack1;
+},"7":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"except\">\n                    "
-    + ((stack1 = this.lambda((depth0 != null ? depth0.excerpt : depth0), depth0)) != null ? stack1 : "")
+    + ((stack1 = container.lambda((depth0 != null ? lookupProperty(depth0,"excerpt") : depth0), depth0)) != null ? stack1 : "")
     + "\n                </div>\n";
-},"9":function(depth0,helpers,partials,data) {
-    var stack1;
+},"9":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"alert alert-danger\">\n                    "
-    + ((stack1 = this.lambda((depth0 != null ? depth0.newerCoreRequired : depth0), depth0)) != null ? stack1 : "")
+    + ((stack1 = container.lambda((depth0 != null ? lookupProperty(depth0,"newerCoreRequired") : depth0), depth0)) != null ? stack1 : "")
     + "\n                </div>\n";
-},"11":function(depth0,helpers,partials,data) {
-    var stack1;
+},"11":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"alert alert-danger\">\n                    "
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.unresolvedSecurityWarnings : depth0)) != null ? stack1.text : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"unresolvedSecurityWarnings") : depth0)) != null ? lookupProperty(stack1,"text") : stack1), depth0))
     + "\n                    <ul>\n"
-    + ((stack1 = helpers.each.call(depth0,((stack1 = (depth0 != null ? depth0.unresolvedSecurityWarnings : depth0)) != null ? stack1.warnings : stack1),{"name":"each","hash":{},"fn":this.program(12, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? lookupProperty(depth0,"unresolvedSecurityWarnings") : depth0)) != null ? lookupProperty(stack1,"warnings") : stack1),{"name":"each","hash":{},"fn":container.program(12, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":42,"column":24},"end":{"line":48,"column":33}}})) != null ? stack1 : "")
     + "                    </ul>\n                </div>\n";
-},"12":function(depth0,helpers,partials,data) {
-    var alias1=this.lambda, alias2=this.escapeExpression;
+},"12":function(container,depth0,helpers,partials,data) {
+    var alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                            <li>\n                                <a href=\""
-    + alias2(alias1((depth0 != null ? depth0.url : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"url") : depth0), depth0))
     + "\" target=\"_blank\" rel=\"noopener noreferrer\">\n                                    "
-    + alias2(alias1((depth0 != null ? depth0.message : depth0), depth0))
+    + alias2(alias1((depth0 != null ? lookupProperty(depth0,"message") : depth0), depth0))
     + "\n                                </a>\n                            </li>\n";
-},"14":function(depth0,helpers,partials,data) {
-    var stack1;
+},"14":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"alert alert-warning\">\n                    "
-    + ((stack1 = this.lambda((depth0 != null ? depth0.deprecated : depth0), depth0)) != null ? stack1 : "")
+    + ((stack1 = container.lambda((depth0 != null ? lookupProperty(depth0,"deprecated") : depth0), depth0)) != null ? stack1 : "")
     + "\n                </div>\n";
-},"16":function(depth0,helpers,partials,data) {
-    var stack1;
+},"16":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"alert alert-warning\">\n                    "
-    + ((stack1 = this.lambda((depth0 != null ? depth0.adoptMe : depth0), depth0)) != null ? stack1 : "")
+    + ((stack1 = container.lambda((depth0 != null ? lookupProperty(depth0,"adoptMe") : depth0), depth0)) != null ? stack1 : "")
     + "\n                </div>\n";
-},"18":function(depth0,helpers,partials,data) {
-    var stack1;
+},"18":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "                <div class=\"alert alert-info\">\n                    "
-    + ((stack1 = this.lambda((depth0 != null ? depth0.newerVersionAvailableNotOffered : depth0), depth0)) != null ? stack1 : "")
+    + ((stack1 = container.lambda((depth0 != null ? lookupProperty(depth0,"newerVersionAvailableNotOffered") : depth0), depth0)) != null ? stack1 : "")
     + "\n                </div>\n";
-},"20":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"20":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
-  return "                <time datetime=\""
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.releaseTimestamp : depth0)) != null ? stack1.iso8601 : stack1), depth0))
+  return "            <td style=\"width: 25%\" data=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"releaseTimestamp") : depth0)) != null ? lookupProperty(stack1,"iso8601") : stack1), depth0))
+    + "\">\n                <time datetime=\""
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"releaseTimestamp") : depth0)) != null ? lookupProperty(stack1,"iso8601") : stack1), depth0))
     + "\">\n                    "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.releaseTimestamp : depth0)) != null ? stack1.displayValue : stack1), depth0))
-    + "\n                </time>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1;
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"releaseTimestamp") : depth0)) != null ? lookupProperty(stack1,"displayValue") : stack1), depth0))
+    + "\n                </time>\n            </td>\n";
+},"22":function(container,depth0,helpers,partials,data) {
+    return "            <td style=\"width: 25%\"></td>\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
-  return ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.plugins : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"plugins") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":78,"column":9}}})) != null ? stack1 : "");
 },"useData":true});
 
 /***/ })
@@ -1028,7 +1092,7 @@ module.exports = (Handlebars["default"] || Handlebars).template({"1":function(de
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(8376); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(8620); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

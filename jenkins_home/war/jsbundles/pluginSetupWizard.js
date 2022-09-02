@@ -1,7 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 415:
+/***/ 553:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10,24 +10,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": function() { return /* binding */ id; }
 /* harmony export */ });
 function id(str) {
-  return ('' + str).replace(/\W+/g, '_');
+  return ("" + str).replace(/\W+/g, "_");
 }
 
 /***/ }),
 
-/***/ 1926:
+/***/ 6664:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/jquery/dist/jquery.js
-var jquery = __webpack_require__(9755);
+// EXTERNAL MODULE: ./.yarn/cache/jquery-npm-3.6.1-6f29087f48-6177d866a7.zip/node_modules/jquery/dist/jquery.js
+var jquery = __webpack_require__(4655);
 var jquery_default = /*#__PURE__*/__webpack_require__.n(jquery);
-// EXTERNAL MODULE: ./node_modules/handlebars/runtime.js
-var runtime = __webpack_require__(202);
-var runtime_default = /*#__PURE__*/__webpack_require__.n(runtime);
-// EXTERNAL MODULE: ./node_modules/window-handle/index.js
-var window_handle = __webpack_require__(6615);
+// EXTERNAL MODULE: ./.yarn/cache/handlebars-npm-4.7.7-a9ccfabf80-1e79a43f5e.zip/node_modules/handlebars/dist/cjs/handlebars.runtime.js
+var handlebars_runtime = __webpack_require__(9856);
+var handlebars_runtime_default = /*#__PURE__*/__webpack_require__.n(handlebars_runtime);
+// EXTERNAL MODULE: ./.yarn/cache/window-handle-npm-1.0.1-369b8e9cbe-8f2c183a0d.zip/node_modules/window-handle/index.js
+var window_handle = __webpack_require__(30);
 ;// CONCATENATED MODULE: ./src/main/js/util/jenkins.js
 /**
  * Jenkins JS Modules common utility functions
@@ -39,10 +39,10 @@ var debug = false;
 var jenkins = {}; // gets the base Jenkins URL including context path
 
 jenkins.baseUrl = function () {
-  var u = jquery_default()('head').attr('data-rooturl');
+  var u = jquery_default()("head").attr("data-rooturl");
 
   if (!u) {
-    u = '';
+    u = "";
   }
 
   return u;
@@ -102,14 +102,14 @@ jenkins.goTo = function (url) {
 
 jenkins.get = function (url, success, options) {
   if (debug) {
-    console.log('get: ' + url);
+    console.log("get: " + url);
   }
 
   var args = {
     url: jenkins.baseUrl() + url,
-    type: 'GET',
+    type: "GET",
     cache: false,
-    dataType: 'json',
+    dataType: "json",
     success: success
   };
 
@@ -127,7 +127,7 @@ jenkins.get = function (url, success, options) {
 
 jenkins.post = function (url, data, success, options) {
   if (debug) {
-    console.log('post: ' + url);
+    console.log("post: " + url);
   } // handle crumbs
 
 
@@ -135,9 +135,9 @@ jenkins.post = function (url, data, success, options) {
   var wnd = window_handle.getWindow();
   var crumb;
 
-  if ('crumb' in options) {
+  if ("crumb" in options) {
     crumb = options.crumb;
-  } else if ('crumb' in wnd) {
+  } else if ("crumb" in wnd) {
     crumb = wnd.crumb;
   }
 
@@ -158,9 +158,9 @@ jenkins.post = function (url, data, success, options) {
 
   var args = {
     url: jenkins.baseUrl() + url,
-    type: 'POST',
+    type: "POST",
     cache: false,
-    dataType: 'json',
+    dataType: "json",
     data: formBody,
     contentType: "application/json",
     success: success,
@@ -179,7 +179,7 @@ jenkins.post = function (url, data, success, options) {
 
 
 jenkins.initHandlebars = function () {
-  return (runtime_default());
+  return (handlebars_runtime_default());
 };
 /**
  * Load translations for the given bundle ID, provide the message object to the handler.
@@ -188,18 +188,18 @@ jenkins.initHandlebars = function () {
 
 
 jenkins.loadTranslations = function (bundleName, handler, onError) {
-  jenkins.get('/i18n/resourceBundle?baseName=' + bundleName, function (res) {
-    if (res.status !== 'ok') {
+  jenkins.get("/i18n/resourceBundle?baseName=" + bundleName, function (res) {
+    if (res.status !== "ok") {
       if (onError) {
         onError(res.message);
       }
 
-      throw 'Unable to load localization data: ' + res.message;
+      throw "Unable to load localization data: " + res.message;
     }
 
     var translations = res.data;
 
-    if ('undefined' !== typeof Proxy) {
+    if ("undefined" !== typeof Proxy) {
       translations = new Proxy(translations, {
         get: function (target, property) {
           if (property in target) {
@@ -226,21 +226,21 @@ jenkins.loadTranslations = function (bundleName, handler, onError) {
 jenkins.testConnectivity = function (siteId, handler) {
   // check the connectivity api
   var testConnectivity = function () {
-    jenkins.get('/updateCenter/connectionStatus?siteId=' + siteId, function (response) {
-      if (response.status !== 'ok') {
+    jenkins.get("/updateCenter/connectionStatus?siteId=" + siteId, function (response) {
+      if (response.status !== "ok") {
         handler(false, true, response.message);
       } // Define statuses, which need additional check iteration via async job on the Jenkins master
       // Statuses like "OK" or "SKIPPED" are considered as fine.
 
 
-      var uncheckedStatuses = ['PRECHECK', 'CHECKING', 'UNCHECKED'];
+      var uncheckedStatuses = ["PRECHECK", "CHECKING", "UNCHECKED"];
 
       if (uncheckedStatuses.indexOf(response.data.updatesite) >= 0 || uncheckedStatuses.indexOf(response.data.internet) >= 0) {
         setTimeout(testConnectivity, 100);
       } else {
         // Update site should be always reachable, but we do not require the internet connection
         // if it's explicitly skipped by the update center
-        if (response.status !== 'ok' || response.data.updatesite !== 'OK' || response.data.internet !== 'OK' && response.data.internet !== 'SKIPPED') {
+        if (response.status !== "ok" || response.data.updatesite !== "OK" || response.data.internet !== "OK" && response.data.internet !== "SKIPPED") {
           // no connectivity, but not fatal
           handler(false, false);
         } else {
@@ -250,7 +250,7 @@ jenkins.testConnectivity = function (siteId, handler) {
     }, {
       error: function (xhr, textStatus, errorThrown) {
         if (xhr.status === 403) {
-          jenkins.goTo('/login');
+          jenkins.goTo("/login");
         } else {
           handler.call({
             isError: true,
@@ -271,9 +271,9 @@ jenkins.testConnectivity = function (siteId, handler) {
 jenkins.getWindow = function ($form) {
   $form = jquery_default()($form);
   var wnd = window_handle.getWindow();
-  jquery_default()(top.document).find('iframe').each(function () {
+  jquery_default()(top.document).find("iframe").each(function () {
     var windowFrame = this.contentWindow;
-    var $f = jquery_default()(this).contents().find('form');
+    var $f = jquery_default()(this).contents().find("form");
     $f.each(function () {
       if ($form[0] === this) {
         wnd = windowFrame;
@@ -294,13 +294,13 @@ jenkins.buildFormPost = function ($form) {
 
   if (wnd.buildFormTree(form)) {
     return $form.serialize() + "&" + jquery_default().param({
-      'core:apply': '',
-      'Submit': 'Save',
-      'json': $form.find('input[name=json]').val()
+      "core:apply": "",
+      Submit: "Save",
+      json: $form.find("input[name=json]").val()
     });
   }
 
-  return '';
+  return "";
 };
 /**
  * Gets the crumb, if crumbs are enabled
@@ -324,7 +324,7 @@ jenkins.staplerPost = function (url, $form, success, options) {
   var crumb = jenkins.getFormCrumb($form);
   jenkins.post(url, postBody, success, jquery_default().extend({
     processData: false,
-    contentType: 'application/x-www-form-urlencoded',
+    contentType: "application/x-www-form-urlencoded",
     crumb: crumb
   }, options));
 };
@@ -340,8 +340,8 @@ var plugins;
 var pluginManager = {};
 
 pluginManager.initialPluginList = function (handler) {
-  util_jenkins.get('/setupWizard/platformPluginList', function (response) {
-    if (response.status !== 'ok') {
+  util_jenkins.get("/setupWizard/platformPluginList", function (response) {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         data: response.data
@@ -439,11 +439,11 @@ pluginManager.recommendedPluginNames = function () {
 
 
 pluginManager.installPlugins = function (plugins, handler) {
-  util_jenkins.post('/pluginManager/installPlugins', {
+  util_jenkins.post("/pluginManager/installPlugins", {
     dynamicLoad: true,
     plugins: plugins
   }, function (response) {
-    if (response.status !== 'ok') {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -472,14 +472,14 @@ pluginManager.installPlugins = function (plugins, handler) {
 
 
 pluginManager.installStatus = function (handler, correlationId) {
-  var url = '/updateCenter/installStatus';
+  var url = "/updateCenter/installStatus";
 
   if (correlationId !== undefined) {
-    url += '?correlationId=' + correlationId;
+    url += "?correlationId=" + correlationId;
   }
 
   util_jenkins.get(url, function (response) {
-    if (response.status !== 'ok') {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -510,8 +510,8 @@ pluginManager.installStatus = function (handler, correlationId) {
 
 
 pluginManager.availablePlugins = function (handler) {
-  util_jenkins.get('/pluginManager/plugins', function (response) {
-    if (response.status !== 'ok') {
+  util_jenkins.get("/pluginManager/plugins", function (response) {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -534,8 +534,8 @@ pluginManager.availablePlugins = function (handler) {
 };
 
 pluginManager.availablePluginsSearch = function (query, limit, handler) {
-  util_jenkins.get('/pluginManager/pluginsSearch?query=' + query + '&limit=' + limit, function (response) {
-    if (response.status !== 'ok') {
+  util_jenkins.get("/pluginManager/pluginsSearch?query=" + query + "&limit=" + limit, function (response) {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -564,14 +564,14 @@ pluginManager.availablePluginsSearch = function (query, limit, handler) {
 
 
 pluginManager.incompleteInstallStatus = function (handler, correlationId) {
-  var url = '/updateCenter/incompleteInstallStatus';
+  var url = "/updateCenter/incompleteInstallStatus";
 
   if (correlationId !== undefined) {
-    url += '?correlationId=' + correlationId;
+    url += "?correlationId=" + correlationId;
   }
 
   util_jenkins.get(url, function (response) {
-    if (response.status !== 'ok') {
+    if (response.status !== "ok") {
       handler.call({
         isError: true,
         errorMessage: response.message
@@ -598,7 +598,7 @@ pluginManager.incompleteInstallStatus = function (handler, correlationId) {
 
 
 pluginManager.completeInstall = function (handler) {
-  util_jenkins.post('/setupWizard/completeInstall', {}, function () {
+  util_jenkins.post("/setupWizard/completeInstall", {}, function () {
     handler.call({
       isError: false
     });
@@ -618,7 +618,7 @@ pluginManager.completeInstall = function (handler) {
 
 
 pluginManager.getRestartStatus = function (handler) {
-  util_jenkins.get('/setupWizard/restartStatus', function (response) {
+  util_jenkins.get("/setupWizard/restartStatus", function (response) {
     handler.call({
       isError: false
     }, response.data);
@@ -638,7 +638,7 @@ pluginManager.getRestartStatus = function (handler) {
 
 
 pluginManager.installPluginsDone = function (handler) {
-  util_jenkins.post('/pluginManager/installPluginsDone', {}, function () {
+  util_jenkins.post("/pluginManager/installPluginsDone", {}, function () {
     handler();
   }, {
     timeout: pluginManagerErrorTimeoutMillis,
@@ -656,7 +656,7 @@ pluginManager.installPluginsDone = function (handler) {
 
 
 pluginManager.restartJenkins = function (handler) {
-  util_jenkins.post('/updateCenter/safeRestart', {}, function () {
+  util_jenkins.post("/updateCenter/safeRestart", {}, function () {
     handler.call({
       isError: false
     });
@@ -680,11 +680,11 @@ pluginManager.restartJenkins = function (handler) {
  */
 
 /*
-* Calls a stapler post method to save the first user settings
-*/
+ * Calls a stapler post method to save the first user settings
+ */
 
 function saveFirstUser($form, success, error) {
-  util_jenkins.staplerPost('/setupWizard/createAdminUser', $form, function (response) {
+  util_jenkins.staplerPost("/setupWizard/createAdminUser", $form, function (response) {
     var crumbRequestField = response.data.crumbRequestField;
 
     if (crumbRequestField) {
@@ -698,7 +698,7 @@ function saveFirstUser($form, success, error) {
 }
 
 function saveConfigureInstance($form, success, error) {
-  util_jenkins.staplerPost('/setupWizard/configureInstance', $form, function (response) {
+  util_jenkins.staplerPost("/setupWizard/configureInstance", $form, function (response) {
     var crumbRequestField = response.data.crumbRequestField;
 
     if (crumbRequestField) {
@@ -716,8 +716,8 @@ function saveConfigureInstance($form, success, error) {
 
 
 function saveProxy($form, success, error) {
-  util_jenkins.staplerPost('/pluginManager/proxyConfigure', $form, success, {
-    dataType: 'html',
+  util_jenkins.staplerPost("/pluginManager/proxyConfigure", $form, success, {
+    dataType: "html",
     error: error
   });
 }
@@ -728,7 +728,7 @@ function saveProxy($form, success, error) {
   saveProxy: saveProxy
 });
 // EXTERNAL MODULE: ./src/main/js/handlebars-helpers/id.js
-var id = __webpack_require__(415);
+var id = __webpack_require__(553);
 ;// CONCATENATED MODULE: ./src/main/js/plugin-setup-wizard/bootstrap-detached.js
 
 /**
@@ -1779,46 +1779,46 @@ function enhanceJQueryWithBootstrap($) {
   }
 }
 // EXTERNAL MODULE: ./src/main/js/templates/errorPanel.hbs
-var errorPanel = __webpack_require__(7066);
+var errorPanel = __webpack_require__(4695);
 var errorPanel_default = /*#__PURE__*/__webpack_require__.n(errorPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/loadingPanel.hbs
-var loadingPanel = __webpack_require__(2581);
+var loadingPanel = __webpack_require__(4076);
 var loadingPanel_default = /*#__PURE__*/__webpack_require__.n(loadingPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/welcomePanel.hbs
-var welcomePanel = __webpack_require__(5254);
+var welcomePanel = __webpack_require__(1301);
 var welcomePanel_default = /*#__PURE__*/__webpack_require__.n(welcomePanel);
 // EXTERNAL MODULE: ./src/main/js/templates/progressPanel.hbs
-var progressPanel = __webpack_require__(822);
+var progressPanel = __webpack_require__(4701);
 var progressPanel_default = /*#__PURE__*/__webpack_require__.n(progressPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/successPanel.hbs
-var successPanel = __webpack_require__(4998);
+var successPanel = __webpack_require__(8971);
 var successPanel_default = /*#__PURE__*/__webpack_require__.n(successPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/pluginSelectionPanel.hbs
-var pluginSelectionPanel = __webpack_require__(5728);
+var pluginSelectionPanel = __webpack_require__(5298);
 var pluginSelectionPanel_default = /*#__PURE__*/__webpack_require__.n(pluginSelectionPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/setupCompletePanel.hbs
-var setupCompletePanel = __webpack_require__(3114);
+var setupCompletePanel = __webpack_require__(4173);
 var setupCompletePanel_default = /*#__PURE__*/__webpack_require__.n(setupCompletePanel);
 // EXTERNAL MODULE: ./src/main/js/templates/proxyConfigPanel.hbs
-var proxyConfigPanel = __webpack_require__(9231);
+var proxyConfigPanel = __webpack_require__(7697);
 var proxyConfigPanel_default = /*#__PURE__*/__webpack_require__.n(proxyConfigPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/firstUserPanel.hbs
-var firstUserPanel = __webpack_require__(1005);
+var firstUserPanel = __webpack_require__(3123);
 var firstUserPanel_default = /*#__PURE__*/__webpack_require__.n(firstUserPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/configureInstance.hbs
-var configureInstance = __webpack_require__(2568);
+var configureInstance = __webpack_require__(900);
 var configureInstance_default = /*#__PURE__*/__webpack_require__.n(configureInstance);
 // EXTERNAL MODULE: ./src/main/js/templates/offlinePanel.hbs
-var offlinePanel = __webpack_require__(942);
+var offlinePanel = __webpack_require__(8661);
 var offlinePanel_default = /*#__PURE__*/__webpack_require__.n(offlinePanel);
 // EXTERNAL MODULE: ./src/main/js/templates/pluginSetupWizard.hbs
-var pluginSetupWizard = __webpack_require__(6101);
+var pluginSetupWizard = __webpack_require__(2202);
 var pluginSetupWizard_default = /*#__PURE__*/__webpack_require__.n(pluginSetupWizard);
 // EXTERNAL MODULE: ./src/main/js/templates/incompleteInstallationPanel.hbs
-var incompleteInstallationPanel = __webpack_require__(1599);
+var incompleteInstallationPanel = __webpack_require__(4012);
 var incompleteInstallationPanel_default = /*#__PURE__*/__webpack_require__.n(incompleteInstallationPanel);
 // EXTERNAL MODULE: ./src/main/js/templates/pluginSelectList.hbs
-var pluginSelectList = __webpack_require__(516);
+var pluginSelectList = __webpack_require__(2585);
 var pluginSelectList_default = /*#__PURE__*/__webpack_require__.n(pluginSelectList);
 ;// CONCATENATED MODULE: ./src/main/js/pluginSetupWizardGui.js
 
@@ -1846,7 +1846,7 @@ var pluginSelectList_default = /*#__PURE__*/__webpack_require__.n(pluginSelectLi
  * Jenkins first-run install wizard
  */
 
-runtime_default().registerPartial('pluginSelectList', (pluginSelectList_default())); // TODO: see whether this is actually being used or if it can be removed
+handlebars_runtime_default().registerPartial("pluginSelectList", (pluginSelectList_default())); // TODO: see whether this is actually being used or if it can be removed
 
 window.zq = (jquery_default()); // Setup the dialog, exported
 
@@ -1854,7 +1854,7 @@ var createPluginSetupWizard = function (appendTarget) {
   var $bs = enhanceJQueryWithBootstrap((jquery_default())); // Necessary handlebars helpers:
   // returns the plugin count string per category selected vs. available e.g. (5/44)
 
-  runtime_default().registerHelper('pluginCountForCategory', function (cat) {
+  handlebars_runtime_default().registerHelper("pluginCountForCategory", function (cat) {
     var plugs = categorizedPlugins[cat];
     var tot = 0;
     var cnt = 0;
@@ -1871,10 +1871,10 @@ var createPluginSetupWizard = function (appendTarget) {
       }
     }
 
-    return '(' + cnt + '/' + tot + ')';
+    return "(" + cnt + "/" + tot + ")";
   }); // returns the total plugin count string selected vs. total e.g. (5/44)
 
-  runtime_default().registerHelper('totalPluginCount', function () {
+  handlebars_runtime_default().registerHelper("totalPluginCount", function () {
     var tot = 0;
     var cnt = 0;
 
@@ -1891,16 +1891,16 @@ var createPluginSetupWizard = function (appendTarget) {
       }
     }
 
-    return '(' + cnt + '/' + tot + ')';
+    return "(" + cnt + "/" + tot + ")";
   }); // determines if the provided plugin is in the list currently selected
 
-  runtime_default().registerHelper('inSelectedPlugins', function (val, options) {
+  handlebars_runtime_default().registerHelper("inSelectedPlugins", function (val, options) {
     if (selectedPluginNames.indexOf(val) >= 0) {
       return options.fn();
     }
   }); // executes a block if there are dependencies
 
-  runtime_default().registerHelper('hasDependencies', function (plugName, options) {
+  handlebars_runtime_default().registerHelper("hasDependencies", function (plugName, options) {
     var plug = availablePlugins[plugName];
 
     if (plug && plug.allDependencies && plug.allDependencies.length > 1) {
@@ -1909,7 +1909,7 @@ var createPluginSetupWizard = function (appendTarget) {
     }
   }); // get total number of dependencies
 
-  runtime_default().registerHelper('dependencyCount', function (plugName) {
+  handlebars_runtime_default().registerHelper("dependencyCount", function (plugName) {
     var plug = availablePlugins[plugName];
 
     if (plug && plug.allDependencies && plug.allDependencies.length > 1) {
@@ -1918,18 +1918,18 @@ var createPluginSetupWizard = function (appendTarget) {
     }
   }); // gets user friendly dependency text
 
-  runtime_default().registerHelper('eachDependency', function (plugName, options) {
+  handlebars_runtime_default().registerHelper("eachDependency", function (plugName, options) {
     var plug = availablePlugins[plugName];
 
     if (!plug) {
-      return '';
+      return "";
     }
 
     var deps = jquery_default().grep(plug.allDependencies, function (value) {
       // remove self
       return value !== plugName;
     });
-    var out = '';
+    var out = "";
 
     for (var i = 0; i < deps.length; i++) {
       var depName = deps[i];
@@ -1943,7 +1943,7 @@ var createPluginSetupWizard = function (appendTarget) {
     return out;
   }); // executes a block if there are dependencies
 
-  runtime_default().registerHelper('ifVisibleDependency', function (plugName, options) {
+  handlebars_runtime_default().registerHelper("ifVisibleDependency", function (plugName, options) {
     if (visibleDependencies[plugName]) {
       return options.fn();
     }
@@ -1957,7 +1957,7 @@ var createPluginSetupWizard = function (appendTarget) {
       if (self.isError) {
         var errorMessage = self.errorMessage;
 
-        if (!errorMessage || self.errorMessage === 'timeout') {
+        if (!errorMessage || self.errorMessage === "timeout") {
           errorMessage = translations.installWizard_error_connection;
         } else {
           errorMessage = translations.installWizard_error_message + " " + errorMessage;
@@ -1984,13 +1984,13 @@ var createPluginSetupWizard = function (appendTarget) {
 
   var $wizard = jquery_default()(pluginSetupWizard_default()());
   $wizard.appendTo(appendTarget);
-  var $container = $wizard.find('.modal-content');
+  var $container = $wizard.find(".modal-content");
   var currentPanel;
   var self = this; // show tooltips; this is done here to work around a bootstrap/prototype incompatibility
 
-  jquery_default()(document).on('mouseenter', '*[data-tooltip]', function () {
+  jquery_default()(document).on("mouseenter", "*[data-tooltip]", function () {
     var $tip = $bs(this);
-    var text = $tip.attr('data-tooltip');
+    var text = $tip.attr("data-tooltip");
 
     if (!text) {
       return;
@@ -2001,16 +2001,16 @@ var createPluginSetupWizard = function (appendTarget) {
     $tip.tooltip({
       html: true,
       title: text
-    }).tooltip('show');
+    }).tooltip("show");
   }); // handle clicking links that might not get highlighted due to position on the page
 
-  $wizard.on('click', '.nav>li>a', function () {
+  $wizard.on("click", ".nav>li>a", function () {
     var $li = jquery_default()(this).parent();
 
     var activateClicked = function () {
-      if (!$li.is('.active')) {
-        $li.parent().find('>li').removeClass('active');
-        $li.addClass('active');
+      if (!$li.is(".active")) {
+        $li.parent().find(">li").removeClass("active");
+        $li.addClass("active");
       }
     };
 
@@ -2024,17 +2024,17 @@ var createPluginSetupWizard = function (appendTarget) {
   }];
 
   var getJenkinsVersionFull = function () {
-    var version = jquery_default()('body').attr('data-version');
+    var version = jquery_default()("body").attr("data-version");
 
     if (!version) {
-      return '';
+      return "";
     }
 
     return version;
   };
 
   var getJenkinsVersion = function () {
-    return getJenkinsVersionFull().replace(/(\d[.][\d.]+).*/, '$1');
+    return getJenkinsVersionFull().replace(/(\d[.][\d.]+).*/, "$1");
   }; // call this to set the panel in the app, this performs some additional things & adds common transitions
 
 
@@ -2046,19 +2046,19 @@ var createPluginSetupWizard = function (appendTarget) {
     };
 
     var oncomplete = function () {
-      var $content = jquery_default()('*[data-load-content]');
+      var $content = jquery_default()("*[data-load-content]");
 
       if ($content.length > 0) {
         $content.each(function () {
           var $el = jquery_default()(this);
-          util_jenkins.get($el.attr('data-load-content'), function (data) {
+          util_jenkins.get($el.attr("data-load-content"), function (data) {
             $el.html(data);
 
             if (onComplete) {
               onComplete();
             }
           }, {
-            dataType: 'html'
+            dataType: "html"
           });
         });
       } else {
@@ -2083,15 +2083,15 @@ var createPluginSetupWizard = function (appendTarget) {
         focusPath.push($focusedItem.index());
         $focusedItem = $focusedItem.parent();
 
-        if ($focusedItem.is('body')) {
+        if ($focusedItem.is("body")) {
           break;
         }
       }
 
       var $upd = jquery_default()(html);
-      $upd.find('*[id]').each(function () {
+      $upd.find("*[id]").each(function () {
         var $el = jquery_default()(this);
-        var $existing = jquery_default()('#' + $el.attr('id'));
+        var $existing = jquery_default()("#" + $el.attr("id"));
 
         if ($existing.length > 0) {
           if ($el[0].outerHTML !== $existing[0].outerHTML) {
@@ -2103,7 +2103,7 @@ var createPluginSetupWizard = function (appendTarget) {
       oncomplete(); // try to refocus on the element that had focus
 
       try {
-        var e = jquery_default()('body')[0];
+        var e = jquery_default()("body")[0];
 
         for (var i = focusPath.length - 1; i >= 0; i--) {
           e = e.children[focusPath[i]];
@@ -2119,28 +2119,28 @@ var createPluginSetupWizard = function (appendTarget) {
         currentPanel = panel;
         $container.append(html);
         decorate($container);
-        var $modalHeader = $container.find('.modal-header');
+        var $modalHeader = $container.find(".modal-header");
 
-        if ($modalHeader.length > 0 && $modalHeader.is('.closeable')) {
+        if ($modalHeader.length > 0 && $modalHeader.is(".closeable")) {
           $modalHeader.prepend('<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
         } // add Jenkins version
 
 
         if (translations.installWizard_jenkinsVersionTitle) {
           // wait until translations available
-          var $modalFooter = $container.find('.modal-footer');
+          var $modalFooter = $container.find(".modal-footer");
 
           if ($modalFooter.length === 0) {
             $modalFooter = jquery_default()('<div class="modal-footer"></div>').appendTo($container);
           }
 
-          $modalFooter.prepend('<div class="jenkins-version">' + translations.installWizard_jenkinsVersionTitle + ' ' + getJenkinsVersionFull() + '</div>');
+          $modalFooter.prepend('<div class="jenkins-version">' + translations.installWizard_jenkinsVersionTitle + " " + getJenkinsVersionFull() + "</div>");
         }
 
         oncomplete();
       };
 
-      var $modalBody = $container.find('.modal-body');
+      var $modalBody = $container.find(".modal-body");
 
       if ($modalBody.length > 0) {
         $modalBody.stop(true).fadeOut(250, function () {
@@ -2226,7 +2226,7 @@ var createPluginSetupWizard = function (appendTarget) {
 
       if (p) {
         var plug = jquery_default().extend({
-          installStatus: 'pending'
+          installStatus: "pending"
         }, p);
         installingPlugins.push(plug);
       }
@@ -2251,8 +2251,8 @@ var createPluginSetupWizard = function (appendTarget) {
 
   var toggleDependencyList = function () {
     var $btn = jquery_default()(this);
-    var $toggle = $btn.parents('.plugin:first');
-    var plugName = $btn.attr('data-plugin-name');
+    var $toggle = $btn.parents(".plugin:first");
+    var plugName = $btn.attr("data-plugin-name");
 
     if (!visibleDependencies[plugName]) {
       visibleDependencies[plugName] = true;
@@ -2261,9 +2261,9 @@ var createPluginSetupWizard = function (appendTarget) {
     }
 
     if (!visibleDependencies[plugName]) {
-      $toggle.removeClass('show-dependencies');
+      $toggle.removeClass("show-dependencies");
     } else {
-      $toggle.addClass('show-dependencies');
+      $toggle.addClass("show-dependencies");
     }
   }; // install the default plugins
 
@@ -2275,15 +2275,15 @@ var createPluginSetupWizard = function (appendTarget) {
   };
 
   var enableButtonsAfterFrameLoad = function () {
-    jquery_default()('iframe[src]').on('load', function () {
-      jquery_default()('button').prop({
+    jquery_default()("iframe[src]").on("load", function () {
+      jquery_default()("button").prop({
         disabled: false
       });
     });
   };
 
   var enableButtonsImmediately = function () {
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: false
     });
   }; // errors: Map of nameOfField to errorMessage
@@ -2306,9 +2306,9 @@ var createPluginSetupWizard = function (appendTarget) {
       var name = errorKeys[i];
       var message = errors[name];
       var $inputField = $iframeDoc.find('[name="' + name + '"]');
-      var $tr = $inputField.parentsUntil('tr').parent();
-      var $errorPanel = $tr.find('.error-panel');
-      $tr.addClass('has-error');
+      var $tr = $inputField.parentsUntil("tr").parent();
+      var $errorPanel = $tr.find(".error-panel");
+      $tr.addClass("has-error");
       $errorPanel.text(message);
     }
   };
@@ -2332,7 +2332,7 @@ var createPluginSetupWizard = function (appendTarget) {
     DEFAULT: function () {
       setPanel((welcomePanel_default())); // focus on default
 
-      jquery_default()('.install-recommended').focus();
+      jquery_default()(".install-recommended").focus();
     },
     CREATE_ADMIN_USER: function () {
       setupFirstUser();
@@ -2378,7 +2378,7 @@ var createPluginSetupWizard = function (appendTarget) {
     }
 
     var attachScrollEvent = function () {
-      var $c = jquery_default()('.install-console-scroll');
+      var $c = jquery_default()(".install-console-scroll");
 
       if (!$c.length) {
         setTimeout(attachScrollEvent, 50);
@@ -2388,19 +2388,19 @@ var createPluginSetupWizard = function (appendTarget) {
       var events = jquery_default()._data($c[0], "events");
 
       if (!events || !events.scroll) {
-        $c.on('scroll', function () {
-          if (!$c.data('wasAutoScrolled')) {
+        $c.on("scroll", function () {
+          if (!$c.data("wasAutoScrolled")) {
             var top = $c[0].scrollHeight - $c.height();
 
             if ($c.scrollTop() === top) {
               // resume auto-scroll
-              $c.data('userScrolled', false);
+              $c.data("userScrolled", false);
             } else {
               // user scrolled up
-              $c.data('userScrolled', true);
+              $c.data("userScrolled", true);
             }
           } else {
-            $c.data('wasAutoScrolled', false);
+            $c.data("wasAutoScrolled", false);
           }
         });
       }
@@ -2435,11 +2435,11 @@ var createPluginSetupWizard = function (appendTarget) {
         } // update progress bar
 
 
-        jquery_default()('.progress-bar').css({
-          width: 100.0 * complete / total + '%'
+        jquery_default()(".progress-bar").css({
+          width: 100.0 * complete / total + "%"
         }); // update details
 
-        var $txt = jquery_default()('.install-text');
+        var $txt = jquery_default()(".install-text");
         $txt.children().remove();
 
         for (i = 0; i < jobs.length; i++) {
@@ -2449,13 +2449,13 @@ var createPluginSetupWizard = function (appendTarget) {
 
           if (/.*Success.*/.test(j.installStatus)) {
             txt = j.title;
-            state = 'success';
+            state = "success";
           } else if (/.*Install.*/.test(j.installStatus)) {
             txt = j.title;
-            state = 'installing';
+            state = "installing";
           } else if (/.*Fail.*/.test(j.installStatus)) {
             txt = j.title;
-            state = 'fail';
+            state = "fail";
           }
 
           setFailureStatus(j);
@@ -2466,41 +2466,41 @@ var createPluginSetupWizard = function (appendTarget) {
 
               if (installing.name === j.name) {
                 installing.installStatus = state;
-              } else if (installing.installStatus === 'pending' && // if no progress
+              } else if (installing.installStatus === "pending" && // if no progress
               installing.allDependencies.indexOf(j.name) >= 0 && ( // and we have a dependency
-              'installing' === state || 'success' === state)) {
+              "installing" === state || "success" === state)) {
                 // installing or successful
-                installing.installStatus = 'installing'; // show this is installing
+                installing.installStatus = "installing"; // show this is installing
               }
             }
 
             var isSelected = selectedPluginNames.indexOf(j.name) < 0 ? false : true;
-            var $div = jquery_default()('<div>' + txt + '</div>');
+            var $div = jquery_default()("<div>" + txt + "</div>");
 
             if (isSelected) {
-              $div.addClass('selected');
+              $div.addClass("selected");
             } else {
-              $div.addClass('dependent');
+              $div.addClass("dependent");
             }
 
             $txt.append($div);
             var $itemProgress = jquery_default()('.selected-plugin[id="installing-' + (0,id["default"])(j.name) + '"]');
 
-            if ($itemProgress.length > 0 && !$itemProgress.is('.' + state)) {
+            if ($itemProgress.length > 0 && !$itemProgress.is("." + state)) {
               $itemProgress.addClass(state);
             }
           }
         }
 
-        var $c = jquery_default()('.install-console-scroll');
+        var $c = jquery_default()(".install-console-scroll");
 
-        if ($c && $c.is(':visible') && !$c.data('userScrolled')) {
-          $c.data('wasAutoScrolled', true);
+        if ($c && $c.is(":visible") && !$c.data("userScrolled")) {
+          $c.data("wasAutoScrolled", true);
           $c.scrollTop($c[0].scrollHeight);
         } // keep polling while install is running
 
 
-        if (complete < total && data.state === 'INITIAL_PLUGINS_INSTALLING') {
+        if (complete < total && data.state === "INITIAL_PLUGINS_INSTALLING") {
           setPanel((progressPanel_default()), {
             installingPlugins: installingPlugins
           }); // wait a sec
@@ -2508,8 +2508,8 @@ var createPluginSetupWizard = function (appendTarget) {
           setTimeout(updateStatus, 250);
         } else {
           // mark complete
-          jquery_default()('.progress-bar').css({
-            width: '100%'
+          jquery_default()(".progress-bar").css({
+            width: "100%"
           });
           showStatePanel(data.state);
         }
@@ -2584,8 +2584,8 @@ var createPluginSetupWizard = function (appendTarget) {
   var loadCustomPluginPanel = function () {
     loadPluginCategories(function () {
       setPanel((pluginSelectionPanel_default()), pluginSelectionPanelData(), function () {
-        $bs('.plugin-selector .plugin-list').scrollspy({
-          target: '.plugin-selector .categories'
+        $bs(".plugin-selector .plugin-list").scrollspy({
+          target: ".plugin-selector .categories"
         });
       });
     });
@@ -2618,19 +2618,19 @@ var createPluginSetupWizard = function (appendTarget) {
   var refreshPluginSelectionPanel = function () {
     setPanel(currentPanel, pluginSelectionPanelData());
 
-    if (lastSearch !== '') {
+    if (lastSearch !== "") {
       searchForPlugins(lastSearch, false);
     }
   }; // handle clicking an item in the plugin list
 
 
-  $wizard.on('change', '.plugin-list input[type=checkbox]', function () {
+  $wizard.on("change", ".plugin-list input[type=checkbox]", function () {
     var $input = jquery_default()(this);
 
-    if ($input.is(':checked')) {
-      addPlugin(selectedPluginNames, $input.attr('name'));
+    if ($input.is(":checked")) {
+      addPlugin(selectedPluginNames, $input.attr("name"));
     } else {
-      removePlugin(selectedPluginNames, $input.attr('name'));
+      removePlugin(selectedPluginNames, $input.attr("name"));
     }
 
     refreshPluginSelectionPanel();
@@ -2670,7 +2670,7 @@ var createPluginSetupWizard = function (appendTarget) {
 
 
   var findIndex = 0;
-  var lastSearch = ''; // scroll to the next match
+  var lastSearch = ""; // scroll to the next match
 
   var scrollPlugin = function ($pl, matches, term) {
     if (matches.length > 0) {
@@ -2681,7 +2681,7 @@ var createPluginSetupWizard = function (appendTarget) {
       }
 
       var $el = jquery_default()(matches[findIndex]);
-      $el = $el.parents('.plugin:first'); // scroll to the block
+      $el = $el.parents(".plugin:first"); // scroll to the block
 
       if ($el && $el.length > 0) {
         var pos = $pl.scrollTop() + $el.position().top;
@@ -2701,18 +2701,18 @@ var createPluginSetupWizard = function (appendTarget) {
 
 
   var searchForPlugins = function (text, scroll) {
-    var $pl = jquery_default()('.plugin-list');
-    var $containers = $pl.find('.plugin'); // must always do this, as it's called after refreshing the panel (e.g. check/uncheck plugs)
+    var $pl = jquery_default()(".plugin-list");
+    var $containers = $pl.find(".plugin"); // must always do this, as it's called after refreshing the panel (e.g. check/uncheck plugs)
 
-    $containers.removeClass('match');
-    $pl.find('h2').removeClass('match');
+    $containers.removeClass("match");
+    $pl.find("h2").removeClass("match");
 
     if (text.length > 1) {
-      if (text === 'show:selected') {
-        jquery_default()('.plugin-list .selected').addClass('match');
+      if (text === "show:selected") {
+        jquery_default()(".plugin-list .selected").addClass("match");
       } else {
         var matches = [];
-        $containers.find('.title,.description').each(function () {
+        $containers.find(".title,.description").each(function () {
           var localMatches = findElementsWithText(this, text.toLowerCase(), function (d) {
             return d.toLowerCase();
           });
@@ -2721,31 +2721,31 @@ var createPluginSetupWizard = function (appendTarget) {
             matches = matches.concat(localMatches);
           }
         });
-        jquery_default()(matches).parents('.plugin').addClass('match');
+        jquery_default()(matches).parents(".plugin").addClass("match");
 
         if (lastSearch !== text && scroll) {
           scrollPlugin($pl, matches, text);
         }
       }
 
-      jquery_default()('.match').parent().prev('h2').addClass('match');
-      $pl.addClass('searching');
+      jquery_default()(".match").parent().prev("h2").addClass("match");
+      $pl.addClass("searching");
     } else {
       findIndex = 0;
-      $pl.removeClass('searching');
+      $pl.removeClass("searching");
     }
 
     lastSearch = text;
   }; // handle input for the search here
 
 
-  $wizard.on('keyup change', '.plugin-select-controls input[name=searchbox]', function () {
+  $wizard.on("keyup change", ".plugin-select-controls input[name=searchbox]", function () {
     var val = jquery_default()(this).val();
     searchForPlugins(val, true);
   }); // handle keyboard up/down navigation between items in
   // in the list, if we're focused somewhere inside
 
-  $wizard.on('keydown', '.plugin-list', function (e) {
+  $wizard.on("keydown", ".plugin-list", function (e) {
     var up = false;
 
     switch (e.which) {
@@ -2763,10 +2763,10 @@ var createPluginSetupWizard = function (appendTarget) {
       // ignore
     }
 
-    var $plugin = jquery_default()(e.target).closest('.plugin');
+    var $plugin = jquery_default()(e.target).closest(".plugin");
 
     if ($plugin && $plugin.length > 0) {
-      var $allPlugins = jquery_default()('.plugin-list .plugin:visible');
+      var $allPlugins = jquery_default()(".plugin-list .plugin:visible");
       var idx = $allPlugins.index($plugin);
       var next = idx + (up ? -1 : 1);
 
@@ -2774,7 +2774,7 @@ var createPluginSetupWizard = function (appendTarget) {
         var $next = jquery_default()($allPlugins[next]);
 
         if ($next && $next.length > 0) {
-          var $chk = $next.find(':checkbox:first');
+          var $chk = $next.find(":checkbox:first");
 
           if ($chk && $chk.length > 0) {
             e.preventDefault();
@@ -2786,17 +2786,17 @@ var createPluginSetupWizard = function (appendTarget) {
     }
   }); // handle clearing the search
 
-  $wizard.on('click', '.clear-search', function () {
-    jquery_default()('input[name=searchbox]').val('');
-    searchForPlugins('', false);
+  $wizard.on("click", ".clear-search", function () {
+    jquery_default()("input[name=searchbox]").val("");
+    searchForPlugins("", false);
   }); // toggles showing the selected items as a simple search
 
   var toggleSelectedSearch = function () {
-    var $srch = jquery_default()('input[name=searchbox]');
-    var val = 'show:selected';
+    var $srch = jquery_default()("input[name=searchbox]");
+    var val = "show:selected";
 
     if ($srch.val() === val) {
-      val = '';
+      val = "";
     }
 
     $srch.val(val);
@@ -2805,10 +2805,10 @@ var createPluginSetupWizard = function (appendTarget) {
 
 
   var selectCategory = function () {
-    jquery_default()('input[name=searchbox]').val('');
-    searchForPlugins('', false);
-    var $el = jquery_default()(jquery_default()(this).attr('href'));
-    var $pl = jquery_default()('.plugin-list');
+    jquery_default()("input[name=searchbox]").val("");
+    searchForPlugins("", false);
+    var $el = jquery_default()(jquery_default()(this).attr("href"));
+    var $pl = jquery_default()(".plugin-list");
     var top = $pl.scrollTop() + $el.position().top;
     $pl.stop(true).animate({
       scrollTop: top
@@ -2820,9 +2820,9 @@ var createPluginSetupWizard = function (appendTarget) {
 
 
   var toggleInstallDetails = function () {
-    var $c = jquery_default()('.install-console');
+    var $c = jquery_default()(".install-console");
 
-    if ($c.is(':visible')) {
+    if ($c.is(":visible")) {
       $c.slideUp();
     } else {
       $c.slideDown();
@@ -2830,11 +2830,11 @@ var createPluginSetupWizard = function (appendTarget) {
   };
 
   var handleFirstUserResponseSuccess = function (data) {
-    if (data.status === 'ok') {
+    if (data.status === "ok") {
       showStatePanel();
     } else {
       setPanel((errorPanel_default()), {
-        errorMessage: 'Error trying to create first user: ' + data.statusText
+        errorMessage: "Error trying to create first user: " + data.statusText
       });
     }
   };
@@ -2845,38 +2845,38 @@ var createPluginSetupWizard = function (appendTarget) {
     // https://stackoverflow.com/a/22913801/1117552
     var responseText = res.responseText;
     var $page = jquery_default()(responseText);
-    var $main = $page.find('#main-panel').detach();
+    var $main = $page.find("#main-panel").detach();
 
     if ($main.length > 0) {
-      responseText = responseText.replace(/body([^>]*)[>](.|[\r\n])+[<][/]body/, 'body$1>' + $main.html() + '</body');
+      responseText = responseText.replace(/body([^>]*)[>](.|[\r\n])+[<][/]body/, "body$1>" + $main.html() + "</body");
     }
 
-    var doc = jquery_default()('iframe#setup-first-user').contents()[0];
+    var doc = jquery_default()("iframe#setup-first-user").contents()[0];
     doc.open();
     doc.write(responseText);
     doc.close();
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: false
     });
   }; // call to submit the first user
 
 
   var saveFirstUser = function () {
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: true
     });
-    var $form = jquery_default()('iframe#setup-first-user').contents().find('form:not(.no-json)');
+    var $form = jquery_default()("iframe#setup-first-user").contents().find("form:not(.no-json)");
     securityConfig.saveFirstUser($form, handleFirstUserResponseSuccess, handleFirstUserResponseError);
   };
 
   var firstUserSkipped = false;
 
   var skipFirstUser = function () {
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: true
     });
     firstUserSkipped = true;
-    util_jenkins.get('/api/json?tree=url', function (data) {
+    util_jenkins.get("/api/json?tree=url", function (data) {
       if (data.url) {
         // as in InstallState.ConfigureInstance.initializeState
         showSetupCompletePanel({
@@ -2894,7 +2894,7 @@ var createPluginSetupWizard = function (appendTarget) {
   };
 
   var handleConfigureInstanceResponseSuccess = function (data) {
-    if (data.status === 'ok') {
+    if (data.status === "ok") {
       if (firstUserSkipped) {
         var message = translations.installWizard_firstUserSkippedMessage;
         showSetupCompletePanel({
@@ -2907,7 +2907,7 @@ var createPluginSetupWizard = function (appendTarget) {
       var errors = data.data;
       setPanel((configureInstance_default()), {}, function () {
         enableButtonsImmediately();
-        displayErrors(jquery_default()('iframe#setup-configure-instance'), errors);
+        displayErrors(jquery_default()("iframe#setup-configure-instance"), errors);
       });
     }
   };
@@ -2918,26 +2918,26 @@ var createPluginSetupWizard = function (appendTarget) {
     // https://stackoverflow.com/a/22913801/1117552
     var responseText = res.responseText;
     var $page = jquery_default()(responseText);
-    var $main = $page.find('#main-panel').detach();
+    var $main = $page.find("#main-panel").detach();
 
     if ($main.length > 0) {
-      responseText = responseText.replace(/body([^>]*)[>](.|[\r\n])+[<][/]body/, 'body$1>' + $main.html() + '</body');
+      responseText = responseText.replace(/body([^>]*)[>](.|[\r\n])+[<][/]body/, "body$1>" + $main.html() + "</body");
     }
 
-    var doc = jquery_default()('iframe#setup-configure-instance').contents()[0];
+    var doc = jquery_default()("iframe#setup-configure-instance").contents()[0];
     doc.open();
     doc.write(responseText);
     doc.close();
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: false
     });
   };
 
   var saveConfigureInstance = function () {
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: true
     });
-    var $form = jquery_default()('iframe#setup-configure-instance').contents().find('form:not(.no-json)');
+    var $form = jquery_default()("iframe#setup-configure-instance").contents().find("form:not(.no-json)");
     securityConfig.saveConfigureInstance($form, handleConfigureInstanceResponseSuccess, handleConfigureInstanceResponseError);
   };
 
@@ -2947,10 +2947,10 @@ var createPluginSetupWizard = function (appendTarget) {
   };
 
   var skipConfigureInstance = function () {
-    jquery_default()('button').prop({
+    jquery_default()("button").prop({
       disabled: true
     });
-    var message = '';
+    var message = "";
 
     if (firstUserSkipped) {
       message += translations.installWizard_firstUserSkippedMessage;
@@ -2969,8 +2969,8 @@ var createPluginSetupWizard = function (appendTarget) {
 
 
   var saveProxyConfig = function () {
-    securityConfig.saveProxy(jquery_default()('iframe[src]').contents().find('form:not(.no-json)'), function () {
-      util_jenkins.goTo('/'); // this will re-run connectivity test
+    securityConfig.saveProxy(jquery_default()("iframe[src]").contents().find("form:not(.no-json)"), function () {
+      util_jenkins.goTo("/"); // this will re-run connectivity test
     });
   }; // push failed plugins to retry
 
@@ -3001,7 +3001,7 @@ var createPluginSetupWizard = function (appendTarget) {
     for (var i = 0; i < installingPlugins.length; i++) {
       var plug = installingPlugins[i];
 
-      if (plug.installStatus === 'pending') {
+      if (plug.installStatus === "pending") {
         selectedPluginNames.push(plug.name);
       }
     }
@@ -3013,21 +3013,21 @@ var createPluginSetupWizard = function (appendTarget) {
   var restartJenkins = function () {
     api_pluginManager.restartJenkins(function () {
       setPanel((loadingPanel_default()));
-      console.log('-------------------');
-      console.log('Waiting for Jenkins to come back online...');
-      console.log('-------------------');
+      console.log("-------------------");
+      console.log("Waiting for Jenkins to come back online...");
+      console.log("-------------------");
 
       var pingUntilRestarted = function () {
         api_pluginManager.getRestartStatus(function (restartStatus) {
           if (this.isError || restartStatus.restartRequired) {
             if (this.isError || restartStatus.restartSupported) {
-              console.log('Waiting...');
+              console.log("Waiting...");
               setTimeout(pingUntilRestarted, 1000);
             } else if (!restartStatus.restartSupported) {
               throw new Error(translations.installWizard_error_restartNotSupported);
             }
           } else {
-            util_jenkins.goTo('/');
+            util_jenkins.goTo("/");
           }
         });
       };
@@ -3039,17 +3039,17 @@ var createPluginSetupWizard = function (appendTarget) {
 
   var closeInstaller = function () {
     api_pluginManager.completeInstall(handleGenericError(function () {
-      util_jenkins.goTo('/');
+      util_jenkins.goTo("/");
     }));
   };
 
   var startOver = function () {
-    util_jenkins.goTo('/');
+    util_jenkins.goTo("/");
   }; // scoped click handler, prevents default actions automatically
 
 
   var bindClickHandler = function (cls, action) {
-    $wizard.on('click', cls, function (e) {
+    $wizard.on("click", cls, function (e) {
       action.apply(this, arguments);
       e.preventDefault();
     });
@@ -3057,57 +3057,57 @@ var createPluginSetupWizard = function (appendTarget) {
 
 
   var actions = {
-    '.toggle-dependency-list': toggleDependencyList,
-    '.install-recommended': installDefaultPlugins,
-    '.install-custom': loadCustomPluginPanel,
-    '.install-home': function () {
+    ".toggle-dependency-list": toggleDependencyList,
+    ".install-recommended": installDefaultPlugins,
+    ".install-custom": loadCustomPluginPanel,
+    ".install-home": function () {
       showStatePanel();
     },
-    '.install-selected': function () {
+    ".install-selected": function () {
       installPlugins(selectedPluginNames);
     },
-    '.toggle-install-details': toggleInstallDetails,
-    '.install-done': finishInstallation,
-    '.plugin-select-all': function () {
+    ".toggle-install-details": toggleInstallDetails,
+    ".install-done": finishInstallation,
+    ".plugin-select-all": function () {
       selectedPluginNames = allPluginNames;
       refreshPluginSelectionPanel();
     },
-    '.plugin-select-none': function () {
+    ".plugin-select-none": function () {
       selectedPluginNames = [];
       refreshPluginSelectionPanel();
     },
-    '.plugin-select-recommended': function () {
+    ".plugin-select-recommended": function () {
       selectedPluginNames = api_pluginManager.recommendedPluginNames();
       refreshPluginSelectionPanel();
     },
-    '.plugin-show-selected': toggleSelectedSearch,
-    '.select-category': selectCategory,
-    '.close': skipFirstUserAndConfigureInstance,
-    '.resume-installation': resumeInstallation,
-    '.install-done-restart': restartJenkins,
-    '.save-first-user:not([disabled])': saveFirstUser,
-    '.skip-first-user': skipFirstUser,
-    '.save-configure-instance:not([disabled])': saveConfigureInstance,
-    '.skip-configure-instance': skipConfigureInstance,
-    '.show-proxy-config': setupProxy,
-    '.save-proxy-config': saveProxyConfig,
-    '.skip-plugin-installs': function () {
+    ".plugin-show-selected": toggleSelectedSearch,
+    ".select-category": selectCategory,
+    ".close": skipFirstUserAndConfigureInstance,
+    ".resume-installation": resumeInstallation,
+    ".install-done-restart": restartJenkins,
+    ".save-first-user:not([disabled])": saveFirstUser,
+    ".skip-first-user": skipFirstUser,
+    ".save-configure-instance:not([disabled])": saveConfigureInstance,
+    ".skip-configure-instance": skipConfigureInstance,
+    ".show-proxy-config": setupProxy,
+    ".save-proxy-config": saveProxyConfig,
+    ".skip-plugin-installs": function () {
       installPlugins([]);
     },
-    '.retry-failed-plugins': retryFailedPlugins,
-    '.continue-with-failed-plugins': continueWithFailedPlugins,
-    '.start-over': startOver
+    ".retry-failed-plugins": retryFailedPlugins,
+    ".continue-with-failed-plugins": continueWithFailedPlugins,
+    ".start-over": startOver
   }; // do this so the page isn't blank while doing connectivity checks and other downloads
 
   setPanel((loadingPanel_default())); // Process extensions
 
   var extensionTranslationOverrides = [];
 
-  if ('undefined' !== typeof setupWizardExtensions) {
+  if ("undefined" !== typeof setupWizardExtensions) {
     jquery_default().each(setupWizardExtensions, function () {
       this.call(self, {
-        '$': (jquery_default()),
-        '$wizard': $wizard,
+        $: (jquery_default()),
+        $wizard: $wizard,
         jenkins: util_jenkins,
         pluginManager: api_pluginManager,
         setPanel: setPanel,
@@ -3144,7 +3144,7 @@ var createPluginSetupWizard = function (appendTarget) {
         if (isFatal) {
           // We cannot continue, show error
           setPanel((errorPanel_default()), {
-            errorMessage: 'Default update site connectivity check failed with fatal error: ' + errorMessage + '. If you see this issue for the custom Jenkins WAR bundle, consider setting the correct value of the hudson.model.UpdateCenter.defaultUpdateSiteId system property (requires Jenkins restart). Otherwise please create a bug in Jenkins JIRA.'
+            errorMessage: "Default update site connectivity check failed with fatal error: " + errorMessage + ". If you see this issue for the custom Jenkins WAR bundle, consider setting the correct value of the hudson.model.UpdateCenter.defaultUpdateSiteId system property (requires Jenkins restart). Otherwise please create a bug in Jenkins JIRA."
           });
         } else {
           // The update center is offline, no problem
@@ -3215,11 +3215,11 @@ var createPluginSetupWizard = function (appendTarget) {
                   var status = incompleteStatus[plugName];
 
                   if (/.*Success.*/.test(status)) {
-                    state = 'success';
+                    state = "success";
                   } else if (/.*Install.*/.test(status)) {
-                    state = 'pending';
+                    state = "pending";
                   } else if (/.*Fail.*/.test(status)) {
-                    state = 'fail';
+                    state = "fail";
                   }
 
                   if (state) {
@@ -3244,7 +3244,7 @@ var createPluginSetupWizard = function (appendTarget) {
   }; // kick off to get resource bundle
 
 
-  util_jenkins.loadTranslations('jenkins.install.pluginSetupWizard', handleGenericError(function (localizations) {
+  util_jenkins.loadTranslations("jenkins.install.pluginSetupWizard", handleGenericError(function (localizations) {
     translations = localizations; // process any translation overrides
 
     jquery_default().each(extensionTranslationOverrides, function () {
@@ -3264,7 +3264,7 @@ var createPluginSetupWizard = function (appendTarget) {
  // This entry point for the bundle only bootstraps the main module in a browser
 
 jquery_default()(function () {
-  jquery_default()('.plugin-setup-wizard-container').each(function () {
+  jquery_default()(".plugin-setup-wizard-container").each(function () {
     var $container = jquery_default()(this);
 
     if ($container.children().length === 0) {
@@ -3276,517 +3276,687 @@ jquery_default()(function () {
 
 /***/ }),
 
-/***/ 2568:
+/***/ 900:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=this.lambda, alias2=this.escapeExpression, alias3=helpers.helperMissing, alias4="function";
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), alias4=container.hooks.helperMissing, alias5="function", lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n	<h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_addFirstUser_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_addFirstUser_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n	<div class=\"jumbotron welcome-panel security-panel\">\n		"
-    + ((stack1 = ((helper = (helper = helpers.message || (depth0 != null ? depth0.message : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(depth0,{"name":"message","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"message") || (depth0 != null ? lookupProperty(depth0,"message") : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"message","hash":{},"data":data,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":15}}}) : helper))) != null ? stack1 : "")
     + "\n\n		<iframe src=\""
-    + alias2(((helper = (helper = helpers.baseUrl || (depth0 != null ? depth0.baseUrl : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(depth0,{"name":"baseUrl","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = lookupProperty(helpers,"baseUrl") || (depth0 != null ? lookupProperty(depth0,"baseUrl") : depth0)) != null ? helper : alias4),(typeof helper === alias5 ? helper.call(alias3,{"name":"baseUrl","hash":{},"data":data,"loc":{"start":{"line":8,"column":15},"end":{"line":8,"column":26}}}) : helper)))
     + "/setupWizard/setupWizardConfigureInstance\" id=\"setup-configure-instance\"></iframe>\n	</div>\n</div>\n<div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-link skip-configure-instance\" disabled>\n        "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_skipConfigureInstance : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_skipConfigureInstance") : stack1), depth0))
     + "\n    </button>\n	<button type=\"button\" class=\"btn btn-primary save-configure-instance\" disabled>\n		"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_saveConfigureInstance : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_saveConfigureInstance") : stack1), depth0))
     + "\n	</button>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 7066:
+/***/ 4695:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n	<h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_error_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_error_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n	<div class=\"container error-container\" id=\"error-message\">\n		<h1>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_error_header : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_error_header") : stack1), depth0))
     + "</h1>\n		<div class=\"alert alert-danger fade in\">\n			"
-    + alias2(((helper = (helper = helpers.errorMessage || (depth0 != null ? depth0.errorMessage : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"errorMessage","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = lookupProperty(helpers,"errorMessage") || (depth0 != null ? lookupProperty(depth0,"errorMessage") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"errorMessage","hash":{},"data":data,"loc":{"start":{"line":8,"column":3},"end":{"line":8,"column":19}}}) : helper)))
     + "\n		</div>\n	</div>\n</div>\n<div class=\"modal-footer\">\n	<button type=\"button\" class=\"btn btn-primary start-over\">\n		"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_retry : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_retry") : stack1), depth0))
     + "\n	</button>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 1005:
+/***/ 3123:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n	<h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_addFirstUser_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_addFirstUser_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n	<div class=\"jumbotron welcome-panel security-panel\">\n		<iframe src=\""
-    + alias2(((helper = (helper = helpers.baseUrl || (depth0 != null ? depth0.baseUrl : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"baseUrl","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = lookupProperty(helpers,"baseUrl") || (depth0 != null ? lookupProperty(depth0,"baseUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"baseUrl","hash":{},"data":data,"loc":{"start":{"line":6,"column":15},"end":{"line":6,"column":26}}}) : helper)))
     + "/setupWizard/setupWizardFirstUser\" id=\"setup-first-user\"></iframe>\n	</div>\n</div>\n<div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-link skip-first-user\" disabled>\n        "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_skipFirstUser : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_skipFirstUser") : stack1), depth0))
     + "\n    </button>\n	<button type=\"button\" class=\"btn btn-primary save-first-user\" disabled>\n		"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_saveFirstUser : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_saveFirstUser") : stack1), depth0))
     + "\n	</button>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 1599:
+/***/ 4012:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data) {
-    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "		<div class=\"selected-plugin "
-    + alias3(((helper = (helper = helpers.installStatus || (depth0 != null ? depth0.installStatus : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"installStatus","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"installStatus") || (depth0 != null ? lookupProperty(depth0,"installStatus") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"installStatus","hash":{},"data":data,"loc":{"start":{"line":12,"column":30},"end":{"line":12,"column":47}}}) : helper)))
     + "\" data-name=\""
-    + alias3(__default(__webpack_require__(415)).call(depth0,(depth0 != null ? depth0.name : depth0),{"name":"id","hash":{},"data":data}))
+    + alias4(__default(__webpack_require__(553)).call(alias1,(depth0 != null ? lookupProperty(depth0,"name") : depth0),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":12,"column":60},"end":{"line":12,"column":71}}}))
     + "\">"
-    + alias3(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"title","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data,"loc":{"start":{"line":12,"column":73},"end":{"line":12,"column":82}}}) : helper)))
     + "</div>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n	<h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installIncomplete_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installIncomplete_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n	<div class=\"jumbotron welcome-panel success-panel\">\n		<h1>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installIncomplete_banner : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installIncomplete_banner") : stack1), depth0))
     + "</h1>\n		<p>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installIncomplete_message : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installIncomplete_message") : stack1), depth0))
     + "</p>\n	</div>\n\n	<div class=\"selected-plugin-progress success-panel\">\n"
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.installingPlugins : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"installingPlugins") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":11,"column":2},"end":{"line":13,"column":11}}})) != null ? stack1 : "")
     + "	</div>\n</div>\n<div class=\"modal-footer\">\n	<button type=\"button\" class=\"btn btn-link install-home\">\n		"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_goBack : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_goBack") : stack1), depth0))
     + "\n	</button>\n	<button type=\"button\" class=\"btn btn-primary resume-installation\">\n		"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installIncomplete_resumeInstallationButtonLabel : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installIncomplete_resumeInstallationButtonLabel") : stack1), depth0))
     + "\n	</button>\n</div>";
 },"useData":true});
 
 /***/ }),
 
-/***/ 2581:
+/***/ 4076:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"loader\"></div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 942:
+/***/ 8661:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n    <h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_offline_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_offline_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n    <div class=\"jumbotron welcome-panel offline\">\n        <h1>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_offline_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_offline_title") : stack1), depth0))
     + "</h1>\n        <p>"
-    + ((stack1 = alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_offline_message : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_offline_message") : stack1), depth0)) != null ? stack1 : "")
     + "</p>\n        <p>\n            <button type=\"button\" class=\"btn btn-primary show-proxy-config\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_configureProxy_label : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_configureProxy_label") : stack1), depth0))
     + "</button>\n            <button type=\"button\" class=\"btn btn-primary skip-plugin-installs\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_skipPluginInstallations : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_skipPluginInstallations") : stack1), depth0))
     + "</button>\n        </p>\n    </div>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 516:
+/***/ 2585:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<h2 id=\""
-    + alias1(__default(__webpack_require__(415)).call(depth0,(data && data.key),{"name":"id","hash":{},"data":data}))
+    + alias2(__default(__webpack_require__(553)).call(alias1,(data && lookupProperty(data,"key")),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":19}}}))
     + "\" class=\"expanded\">"
-    + alias1(((helper = (helper = helpers.key || (data && data.key)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"key","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = lookupProperty(helpers,"key") || (data && lookupProperty(data,"key"))) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"key","hash":{},"data":data,"loc":{"start":{"line":2,"column":38},"end":{"line":2,"column":46}}}) : helper)))
     + " "
-    + alias1(helpers.pluginCountForCategory.call(depth0,(data && data.key),{"name":"pluginCountForCategory","hash":{},"data":data}))
+    + alias2(lookupProperty(helpers,"pluginCountForCategory").call(alias1,(data && lookupProperty(data,"key")),{"name":"pluginCountForCategory","hash":{},"data":data,"loc":{"start":{"line":2,"column":47},"end":{"line":2,"column":78}}}))
     + "</h2>\n<div class=\"plugins-for-category\">\n"
-    + ((stack1 = helpers.each.call(depth0,depth0,{"name":"each","hash":{},"fn":this.program(2, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(alias1,depth0,{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":4,"column":2},"end":{"line":32,"column":11}}})) != null ? stack1 : "")
     + "</div>\n";
-},"2":function(depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, helper, alias1=this.escapeExpression, alias2=this.lambda, alias3=helpers.helperMissing;
+},"2":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.escapeExpression, alias3=container.lambda, alias4=container.hooks.helperMissing, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "  <div class=\"plugin "
-    + alias1(__default(__webpack_require__(415)).call(depth0,((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1),{"name":"id","hash":{},"data":data}))
+    + alias2(__default(__webpack_require__(553)).call(alias1,((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":5,"column":21},"end":{"line":5,"column":39}}}))
     + " "
-    + ((stack1 = helpers.inSelectedPlugins.call(depth0,((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1),{"name":"inSelectedPlugins","hash":{},"fn":this.program(3, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"inSelectedPlugins").call(alias1,((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1),{"name":"inSelectedPlugins","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":40},"end":{"line":5,"column":104}}})) != null ? stack1 : "")
     + " "
-    + ((stack1 = helpers.ifVisibleDependency.call(depth0,((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1),{"name":"ifVisibleDependency","hash":{},"fn":this.program(5, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"ifVisibleDependency").call(alias1,((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1),{"name":"ifVisibleDependency","hash":{},"fn":container.program(5, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":5,"column":105},"end":{"line":5,"column":182}}})) != null ? stack1 : "")
     + "\" id=\"row-"
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1), depth0))
     + "\">\n    <label>\n      <span class=\"title\">\n        <input type=\"checkbox\" id=\"chk-"
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1), depth0))
     + "\" name=\""
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1), depth0))
+    + alias2(alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1), depth0))
     + "\" value=\""
-    + alias1(((helper = (helper = helpers.searchTerm || (depth0 != null ? depth0.searchTerm : depth0)) != null ? helper : alias3),(typeof helper === "function" ? helper.call(depth0,{"name":"searchTerm","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = lookupProperty(helpers,"searchTerm") || (depth0 != null ? lookupProperty(depth0,"searchTerm") : depth0)) != null ? helper : alias4),(typeof helper === "function" ? helper.call(alias1,{"name":"searchTerm","hash":{},"data":data,"loc":{"start":{"line":8,"column":86},"end":{"line":8,"column":100}}}) : helper)))
     + "\" "
-    + ((stack1 = helpers.inSelectedPlugins.call(depth0,((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1),{"name":"inSelectedPlugins","hash":{},"fn":this.program(7, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"inSelectedPlugins").call(alias1,((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1),{"name":"inSelectedPlugins","hash":{},"fn":container.program(7, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":102},"end":{"line":8,"column":175}}})) != null ? stack1 : "")
     + "/>\n        "
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.title : stack1), depth0))
+    + alias2(alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"title") : stack1), depth0))
     + "\n        <a href=\""
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.website : stack1), depth0))
+    + alias2(alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"website") : stack1), depth0))
     + "\" target=\"_blank\" class=\"website-link\" rel=\"noopener noreferrer\" title=\""
-    + alias1(alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.title : stack1), depth0))
+    + alias2(alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"title") : stack1), depth0))
     + " "
-    + alias1(alias2(((stack1 = (depths[2] != null ? depths[2].translations : depths[2])) != null ? stack1.installWizard_websiteLinkLabel : stack1), depth0))
+    + alias2(alias3(((stack1 = (depths[2] != null ? lookupProperty(depths[2],"translations") : depths[2])) != null ? lookupProperty(stack1,"installWizard_websiteLinkLabel") : stack1), depth0))
     + "\"></a>\n      </span>\n"
-    + ((stack1 = (helpers.hasDependencies || (depth0 && depth0.hasDependencies) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1),{"name":"hasDependencies","hash":{},"fn":this.program(9, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (lookupProperty(helpers,"hasDependencies")||(depth0 && lookupProperty(depth0,"hasDependencies"))||alias4).call(alias1,((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1),{"name":"hasDependencies","hash":{},"fn":container.program(9, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":12,"column":6},"end":{"line":16,"column":26}}})) != null ? stack1 : "")
     + "      <span class=\"description\">\n        "
-    + ((stack1 = alias2(((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.excerpt : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias3(((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"excerpt") : stack1), depth0)) != null ? stack1 : "")
     + "\n      </span>\n"
-    + ((stack1 = (helpers.hasDependencies || (depth0 && depth0.hasDependencies) || alias3).call(depth0,((stack1 = (depth0 != null ? depth0.plugin : depth0)) != null ? stack1.name : stack1),{"name":"hasDependencies","hash":{},"fn":this.program(11, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = (lookupProperty(helpers,"hasDependencies")||(depth0 && lookupProperty(depth0,"hasDependencies"))||alias4).call(alias1,((stack1 = (depth0 != null ? lookupProperty(depth0,"plugin") : depth0)) != null ? lookupProperty(stack1,"name") : stack1),{"name":"hasDependencies","hash":{},"fn":container.program(11, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":20,"column":6},"end":{"line":29,"column":26}}})) != null ? stack1 : "")
     + "    </label>\n  </div>\n";
-},"3":function(depth0,helpers,partials,data) {
+},"3":function(container,depth0,helpers,partials,data) {
     return "selected";
-},"5":function(depth0,helpers,partials,data) {
+},"5":function(container,depth0,helpers,partials,data) {
     return "show-dependencies";
-},"7":function(depth0,helpers,partials,data) {
+},"7":function(container,depth0,helpers,partials,data) {
     return "checked=\"checked\"";
-},"9":function(depth0,helpers,partials,data,blockParams,depths) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"9":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "        <a href=\"#\" class=\"btn btn-link toggle-dependency-list\" type=\"button\" data-plugin-name=\""
-    + alias2(alias1(((stack1 = (depths[1] != null ? depths[1].plugin : depths[1])) != null ? stack1.name : stack1), depth0))
+    + alias2(alias1(((stack1 = (depths[1] != null ? lookupProperty(depths[1],"plugin") : depths[1])) != null ? lookupProperty(stack1,"name") : stack1), depth0))
     + "\" title=\""
-    + alias2(alias1(((stack1 = (depths[1] != null ? depths[1].plugin : depths[1])) != null ? stack1.title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depths[1] != null ? lookupProperty(depths[1],"plugin") : depths[1])) != null ? lookupProperty(stack1,"title") : stack1), depth0))
     + " "
-    + alias2(alias1(((stack1 = (depths[3] != null ? depths[3].translations : depths[3])) != null ? stack1.installWizard_installIncomplete_dependenciesLabel : stack1), depth0))
+    + alias2(alias1(((stack1 = (depths[3] != null ? lookupProperty(depths[3],"translations") : depths[3])) != null ? lookupProperty(stack1,"installWizard_installIncomplete_dependenciesLabel") : stack1), depth0))
     + "\">\n          <span class=\"badge\">"
-    + alias2(helpers.dependencyCount.call(depth0,((stack1 = (depths[1] != null ? depths[1].plugin : depths[1])) != null ? stack1.name : stack1),{"name":"dependencyCount","hash":{},"data":data}))
+    + alias2(lookupProperty(helpers,"dependencyCount").call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depths[1] != null ? lookupProperty(depths[1],"plugin") : depths[1])) != null ? lookupProperty(stack1,"name") : stack1),{"name":"dependencyCount","hash":{},"data":data,"loc":{"start":{"line":14,"column":30},"end":{"line":14,"column":64}}}))
     + "</span>\n        </a>\n";
-},"11":function(depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
+},"11":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "        <div class=\"dep-list\">\n          <h3 class=\"dep-title\">"
-    + this.escapeExpression(this.lambda(((stack1 = (depths[3] != null ? depths[3].translations : depths[3])) != null ? stack1.installWizard_installIncomplete_dependenciesLabel : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depths[3] != null ? lookupProperty(depths[3],"translations") : depths[3])) != null ? lookupProperty(stack1,"installWizard_installIncomplete_dependenciesLabel") : stack1), depth0))
     + "</h3>\n"
-    + ((stack1 = helpers.eachDependency.call(depth0,((stack1 = (depths[1] != null ? depths[1].plugin : depths[1])) != null ? stack1.name : stack1),{"name":"eachDependency","hash":{},"fn":this.program(12, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"eachDependency").call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depths[1] != null ? lookupProperty(depths[1],"plugin") : depths[1])) != null ? lookupProperty(stack1,"name") : stack1),{"name":"eachDependency","hash":{},"fn":container.program(12, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":23,"column":10},"end":{"line":27,"column":29}}})) != null ? stack1 : "")
     + "        </div>\n";
-},"12":function(depth0,helpers,partials,data) {
-    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+},"12":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "          <a class=\"dep badge\" href=\""
-    + alias3(((helper = (helper = helpers.website || (depth0 != null ? depth0.website : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"website","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"website") || (depth0 != null ? lookupProperty(depth0,"website") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"website","hash":{},"data":data,"loc":{"start":{"line":24,"column":37},"end":{"line":24,"column":48}}}) : helper)))
     + "\" rel=\"noopener noreferrer\" target=\"_blank\">\n          "
-    + alias3(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"title","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data,"loc":{"start":{"line":25,"column":10},"end":{"line":25,"column":19}}}) : helper)))
     + "\n          </a>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data,blockParams,depths) {
-    var stack1;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
-  return ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.categorizedPlugins : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0, blockParams, depths),"inverse":this.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"categorizedPlugins") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data,"loc":{"start":{"line":1,"column":0},"end":{"line":34,"column":9}}})) != null ? stack1 : "");
 },"useData":true,"useDepths":true});
 
 /***/ }),
 
-/***/ 5728:
+/***/ 5298:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data) {
-    var alias1=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    var alias1=container.escapeExpression;
 
   return "    <li><a href=\"#"
-    + alias1(__default(__webpack_require__(415)).call(depth0,depth0,{"name":"id","hash":{},"data":data}))
+    + alias1(__default(__webpack_require__(553)).call(depth0 != null ? depth0 : (container.nullContext || {}),depth0,{"name":"id","hash":{},"data":data,"loc":{"start":{"line":8,"column":18},"end":{"line":8,"column":29}}}))
     + "\" class=\"select-category\">"
-    + alias1(this.lambda(depth0, depth0))
+    + alias1(container.lambda(depth0, depth0))
     + "</a></li>\n";
-},"3":function(depth0,helpers,partials,data) {
-    return this.escapeExpression(this.lambda(depth0, depth0))
+},"3":function(container,depth0,helpers,partials,data) {
+    return container.escapeExpression(container.lambda(depth0, depth0))
     + ",";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header closeable\">\n  <h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installCustom_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installCustom_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body plugin-selector\">\n  <div class=\"categories col-sm-3\">\n  <ul class=\"nav\">\n"
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.categories : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(alias3,(depth0 != null ? lookupProperty(depth0,"categories") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":7,"column":4},"end":{"line":9,"column":13}}})) != null ? stack1 : "")
     + "  </ul>\n  </div>\n  <div class=\"plugins col-sm-9\">\n    <div class=\"plugin-select-controls\">\n      <span class=\"plugin-select-actions\">\n        <a href=\"#\" class=\"plugin-select-all\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installCustom_selectAll : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installCustom_selectAll") : stack1), depth0))
     + "</a>\n        <a href=\"#\" class=\"plugin-select-none\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installCustom_selectNone : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installCustom_selectNone") : stack1), depth0))
     + "</a>\n        <a href=\"#\" class=\"plugin-select-recommended\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installCustom_selectRecommended : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installCustom_selectRecommended") : stack1), depth0))
     + "</a>\n      </span>\n      <span class=\"plugin-search-controls\">\n        <input type=\"text\" name=\"searchbox\" class=\"form-control\" />\n        <a href=\"#\" class=\"clear-search\">&times;</a>\n      </span>\n      <span id=\"plugin-selected-info\" class=\"plugin-selected-info\" data-selected-plugins=\""
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.selectedPlugins : depth0),{"name":"each","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(alias3,(depth0 != null ? lookupProperty(depth0,"selectedPlugins") : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":23,"column":90},"end":{"line":23,"column":133}}})) != null ? stack1 : "")
     + "\">\n        <a href=\"#\" class=\"plugin-show-selected\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installCustom_selected : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installCustom_selected") : stack1), depth0))
     + "</a> "
-    + alias2(helpers.totalPluginCount.call(depth0,{"name":"totalPluginCount","hash":{},"data":data}))
+    + alias2(lookupProperty(helpers,"totalPluginCount").call(alias3,{"name":"totalPluginCount","hash":{},"data":data,"loc":{"start":{"line":24,"column":107},"end":{"line":24,"column":127}}}))
     + "\n      </span>\n    </div>\n        <div class=\"plugin-list\">\n            <div class=\"plugin-list-description\">"
-    + ((stack1 = alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installCustom_pluginListDesc : stack1), depth0)) != null ? stack1 : "")
+    + ((stack1 = alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installCustom_pluginListDesc") : stack1), depth0)) != null ? stack1 : "")
     + "</div>\n"
-    + ((stack1 = this.invokePartial(__webpack_require__(516),depth0,{"name":"pluginSelectList","data":data,"indent":"        ","helpers":helpers,"partials":partials})) != null ? stack1 : "")
+    + ((stack1 = container.invokePartial(__webpack_require__(2585),depth0,{"name":"pluginSelectList","data":data,"indent":"        ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
     + "    </div>\n  </div>\n</div>\n<div class=\"modal-footer\">\n  <button type=\"button\" class=\"btn btn-link install-home\">\n    "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_goBack : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_goBack") : stack1), depth0))
     + "\n  </button>\n  <button type=\"button\" class=\"btn btn-primary install-selected\">\n    "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_goInstall : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_goInstall") : stack1), depth0))
     + "\n  </button>\n</div>\n";
 },"usePartial":true,"useData":true});
 
 /***/ }),
 
-/***/ 6101:
+/***/ 2202:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"plugin-setup-wizard bootstrap-3\">\n	<div class=\"modal fade in\" style=\"display: block;\">\n		<div class=\"modal-dialog\">\n			<div class=\"modal-content\"></div>\n		</div>\n	</div>\n</div>";
 },"useData":true});
 
 /***/ }),
 
-/***/ 822:
+/***/ 4701:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data) {
-    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "		<div class=\"selected-plugin "
-    + alias3(((helper = (helper = helpers.installStatus || (depth0 != null ? depth0.installStatus : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"installStatus","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"installStatus") || (depth0 != null ? lookupProperty(depth0,"installStatus") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"installStatus","hash":{},"data":data,"loc":{"start":{"line":16,"column":30},"end":{"line":16,"column":47}}}) : helper)))
     + "\" id=\"installing-"
-    + alias3(__default(__webpack_require__(415)).call(depth0,(depth0 != null ? depth0.name : depth0),{"name":"id","hash":{},"data":data}))
+    + alias4(__default(__webpack_require__(553)).call(alias1,(depth0 != null ? lookupProperty(depth0,"name") : depth0),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":16,"column":64},"end":{"line":16,"column":75}}}))
     + "\" data-tooltip=\""
-    + alias3(((helper = (helper = helpers.errorMessage || (depth0 != null ? depth0.errorMessage : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"errorMessage","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"errorMessage") || (depth0 != null ? lookupProperty(depth0,"errorMessage") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"errorMessage","hash":{},"data":data,"loc":{"start":{"line":16,"column":91},"end":{"line":16,"column":107}}}) : helper)))
     + "\">"
-    + alias3(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"title","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data,"loc":{"start":{"line":16,"column":109},"end":{"line":16,"column":118}}}) : helper)))
     + "</div>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n	<h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installing_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installing_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body installing-body\">\n	<div class=\"jumbotron welcome-panel installing-panel\">\n		<h1>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installing_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installing_title") : stack1), depth0))
     + "</h1>\n		<div class=\"progress\">\n		  <div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 0%;\">\n		    <span class=\"sr-only\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installing_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installing_title") : stack1), depth0))
     + "</span>\n		  </div>\n		</div>\n	</div>\n\n	<div class=\"selected-plugin-progress\">\n"
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.installingPlugins : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"installingPlugins") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":15,"column":2},"end":{"line":17,"column":11}}})) != null ? stack1 : "")
     + "	</div>\n\n	<div class=\"install-console\">\n	  <div class=\"install-console-scroll\">\n	    <div class=\"install-text\"></div>\n	  </div>\n	  <div class=\"dependency-legend\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installingConsole_dependencyIndicatorNote : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installingConsole_dependencyIndicatorNote") : stack1), depth0))
     + "</div>\n	</div>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 9231:
+/***/ 7697:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n    <h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_configureProxy_label : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_configureProxy_label") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n    <div class=\"jumbotron welcome-panel security-panel\">\n        <iframe src=\""
-    + alias2(((helper = (helper = helpers.baseUrl || (depth0 != null ? depth0.baseUrl : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"baseUrl","hash":{},"data":data}) : helper)))
+    + alias2(((helper = (helper = lookupProperty(helpers,"baseUrl") || (depth0 != null ? lookupProperty(depth0,"baseUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"baseUrl","hash":{},"data":data,"loc":{"start":{"line":6,"column":21},"end":{"line":6,"column":32}}}) : helper)))
     + "/setupWizard/proxy-configuration\"></iframe>\n    </div>\n</div>\n<div class=\"modal-footer\">\n    <button type=\"button\" class=\"btn btn-link install-home\">\n        "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_goBack : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_goBack") : stack1), depth0))
     + "\n    </button>\n    <button type=\"button\" class=\"btn btn-primary save-proxy-config\" disabled>\n        "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_configureProxy_save : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_configureProxy_save") : stack1), depth0))
     + "\n    </button>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 3114:
+/***/ 4173:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data) {
-    var stack1;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "		<h1>"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_bannerRestart : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_bannerRestart") : stack1), depth0))
     + "</h1>\n";
-},"3":function(depth0,helpers,partials,data) {
-    var stack1;
+},"3":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "		<h1>"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_banner : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_banner") : stack1), depth0))
     + "</h1>\n";
-},"5":function(depth0,helpers,partials,data) {
-    var stack1;
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
-  return ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.restartSupported : depth0),{"name":"if","hash":{},"fn":this.program(6, data, 0),"inverse":this.program(8, data, 0),"data":data})) != null ? stack1 : "");
-},"6":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+  return ((stack1 = lookupProperty(helpers,"if").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"restartSupported") : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.program(8, data, 0),"data":data,"loc":{"start":{"line":15,"column":3},"end":{"line":22,"column":10}}})) != null ? stack1 : "");
+},"6":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "			<p>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_installComplete_restartRequiredMessage : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_installComplete_restartRequiredMessage") : stack1), depth0))
     + "</p>\n			<button type=\"button\" class=\"btn btn-primary install-done-restart\">\n				"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_restartLabel : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_restartLabel") : stack1), depth0))
     + "\n			</button>\n";
-},"8":function(depth0,helpers,partials,data) {
-    var stack1;
+},"8":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "			<p>"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_installComplete_restartRequiredNotSupportedMessage : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_installComplete_restartRequiredNotSupportedMessage") : stack1), depth0))
     + "</p>\n";
-},"10":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "		<p>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_message : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_message") : stack1), depth0))
     + "</p>\n		<button type=\"button\" class=\"btn btn-primary install-done\">\n			"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_finishButtonLabel : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_finishButtonLabel") : stack1), depth0))
     + "\n		</button>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, helper;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n	<h4 class=\"modal-title\">"
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_installComplete_title : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_installComplete_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n	<div class=\"jumbotron welcome-panel success-panel\">\n"
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.restartRequired : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.program(3, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"restartRequired") : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data,"loc":{"start":{"line":6,"column":2},"end":{"line":10,"column":9}}})) != null ? stack1 : "")
     + "		\n		"
-    + ((stack1 = ((helper = (helper = helpers.message || (depth0 != null ? depth0.message : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0,{"name":"message","hash":{},"data":data}) : helper))) != null ? stack1 : "")
+    + ((stack1 = ((helper = (helper = lookupProperty(helpers,"message") || (depth0 != null ? lookupProperty(depth0,"message") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"message","hash":{},"data":data,"loc":{"start":{"line":12,"column":2},"end":{"line":12,"column":15}}}) : helper))) != null ? stack1 : "")
     + "\n\n"
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.restartRequired : depth0),{"name":"if","hash":{},"fn":this.program(5, data, 0),"inverse":this.program(10, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias1,(depth0 != null ? lookupProperty(depth0,"restartRequired") : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(10, data, 0),"data":data,"loc":{"start":{"line":14,"column":2},"end":{"line":28,"column":9}}})) != null ? stack1 : "")
     + "	</div>\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 4998:
+/***/ 8971:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"1":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "        <p>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_pluginInstallFailure_message : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_pluginInstallFailure_message") : stack1), depth0))
     + "</p>\n        <button type=\"button\" class=\"btn btn-primary retry-failed-plugins\">\n            "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_retry : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_retry") : stack1), depth0))
     + "\n        </button>\n";
-},"3":function(depth0,helpers,partials,data) {
-    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+},"3":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=container.hooks.helperMissing, alias3="function", alias4=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "        <div class=\"selected-plugin "
-    + alias3(((helper = (helper = helpers.installStatus || (depth0 != null ? depth0.installStatus : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"installStatus","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"installStatus") || (depth0 != null ? lookupProperty(depth0,"installStatus") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"installStatus","hash":{},"data":data,"loc":{"start":{"line":18,"column":36},"end":{"line":18,"column":53}}}) : helper)))
     + "\" data-name=\""
-    + alias3(__default(__webpack_require__(415)).call(depth0,(depth0 != null ? depth0.name : depth0),{"name":"id","hash":{},"data":data}))
+    + alias4(__default(__webpack_require__(553)).call(alias1,(depth0 != null ? lookupProperty(depth0,"name") : depth0),{"name":"id","hash":{},"data":data,"loc":{"start":{"line":18,"column":66},"end":{"line":18,"column":77}}}))
     + "\">"
-    + alias3(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"title","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data,"loc":{"start":{"line":18,"column":79},"end":{"line":18,"column":88}}}) : helper)))
     + "</div>\n";
-},"5":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"5":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "    <button type=\"button\" class=\"btn btn-link continue-with-failed-plugins\">\n        "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_continue : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_continue") : stack1), depth0))
     + "\n    </button>\n    <button type=\"button\" class=\"btn btn-primary retry-failed-plugins\">\n        "
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_retry : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_retry") : stack1), depth0))
     + "\n    </button>\n";
-},"7":function(depth0,helpers,partials,data) {
-    var stack1;
+},"7":function(container,depth0,helpers,partials,data) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "    <button type=\"button\" class=\"btn btn-primary continue-with-failed-plugins\">\n        "
-    + this.escapeExpression(this.lambda(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_continue : stack1), depth0))
+    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_continue") : stack1), depth0))
     + "\n    </button>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header\">\n    <h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n    <div class=\"jumbotron welcome-panel success-panel\">\n        <h1>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_pluginInstallFailure_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_pluginInstallFailure_title") : stack1), depth0))
     + "</h1>\n\n"
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.failedPlugins : depth0),{"name":"if","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"failedPlugins") : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":8,"column":8},"end":{"line":13,"column":15}}})) != null ? stack1 : "")
     + "    </div>\n\n    <div class=\"selected-plugin-progress success-panel\">\n"
-    + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.installingPlugins : depth0),{"name":"each","hash":{},"fn":this.program(3, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(alias3,(depth0 != null ? lookupProperty(depth0,"installingPlugins") : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data,"loc":{"start":{"line":17,"column":8},"end":{"line":19,"column":17}}})) != null ? stack1 : "")
     + "    </div>\n</div>\n<div class=\"modal-footer\">\n"
-    + ((stack1 = helpers["if"].call(depth0,(depth0 != null ? depth0.failedPlugins : depth0),{"name":"if","hash":{},"fn":this.program(5, data, 0),"inverse":this.program(7, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"if").call(alias3,(depth0 != null ? lookupProperty(depth0,"failedPlugins") : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(7, data, 0),"data":data,"loc":{"start":{"line":23,"column":4},"end":{"line":34,"column":11}}})) != null ? stack1 : "")
     + "</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 5254:
+/***/ 1301:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-var Handlebars = __webpack_require__(202);
+var Handlebars = __webpack_require__(2280);
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-    var stack1, alias1=this.lambda, alias2=this.escapeExpression;
+module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
 
   return "<div class=\"modal-header closeable\">\n	<h4 class=\"modal-title\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_title : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_title") : stack1), depth0))
     + "</h4>\n</div>\n<div class=\"modal-body\">\n  <i class=\"water-mark icon-service\"></i>\n  <div class=\"jumbotron welcome-panel\">\n		 <h1>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_banner : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_banner") : stack1), depth0))
     + "</h1>\n	<p>\n			"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_message : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_message") : stack1), depth0))
     + "\n		</p>\n		<p class=\"button-set\">\n			<a class=\"btn btn-primary btn-lg btn-huge install-recommended\" href=\"#\" role=\"button\">\n				<b>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_recommendedActionTitle : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_recommendedActionTitle") : stack1), depth0))
     + "</b>\n				<sub>\n					"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_recommendedActionDetails : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_recommendedActionDetails") : stack1), depth0))
     + "\n				</sub>\n				<i class=\"icon icon-signup\"></i>\n			</a>\n\n			<a class=\"btn btn-default btn-lg btn-huge install-custom\" href=\"#\" role=\"button\">\n				<b>"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_customizeActionTitle : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_customizeActionTitle") : stack1), depth0))
     + "</b>\n				<sub>\n					"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.translations : depth0)) != null ? stack1.installWizard_welcomePanel_customizeActionDetails : stack1), depth0))
+    + alias2(alias1(((stack1 = (depth0 != null ? lookupProperty(depth0,"translations") : depth0)) != null ? lookupProperty(stack1,"installWizard_welcomePanel_customizeActionDetails") : stack1), depth0))
     + "\n				</sub>\n				<i class=\"icon icon-plug\"></i>\n			</a>\n		</p>\n	</div>\n\n</div>\n";
 },"useData":true});
 
 /***/ }),
 
-/***/ 9485:
+/***/ 6961:
 /***/ (function() {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 789:
+/***/ 4856:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3379);
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9485);
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3093);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2021);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6550);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7888);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1560);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(951);
+/* harmony import */ var _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6961);
+/* harmony import */ var _yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6__);
 
-            
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
 var options = {};
 
-options.insert = "head";
-options.singleton = false;
+options.styleTagTransform = (_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleTagTransform_js__WEBPACK_IMPORTED_MODULE_5___default());
+options.setAttributes = (_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_setAttributesWithoutAttributes_js__WEBPACK_IMPORTED_MODULE_3___default());
 
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()((_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_1___default()), options);
+      options.insert = _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertBySelector_js__WEBPACK_IMPORTED_MODULE_2___default().bind(null, "head");
+    
+options.domAPI = (_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_styleDomAPI_js__WEBPACK_IMPORTED_MODULE_1___default());
+options.insertStyleElement = (_yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_insertStyleElement_js__WEBPACK_IMPORTED_MODULE_4___default());
+
+var update = _yarn_virtual_style_loader_virtual_ed9460aef7_0_cache_style_loader_npm_3_3_1_4bbb6ec77f_470feef680_zip_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()((_yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6___default()), options);
 
 
 
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_1___default().locals) || {});
+
+       /* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((_yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6___default()) && (_yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6___default().locals) ? (_yarn_virtual_mini_css_extract_plugin_virtual_bc5594cf9b_0_cache_mini_css_extract_plugin_npm_2_6_1_4e6d2beaf0_df60840404_zip_node_modules_mini_css_extract_plugin_dist_loader_js_ruleSet_1_rules_0_use_1_yarn_virtual_css_loader_virtual_69d962f175_0_cache_css_loader_npm_6_7_1_b93a2de0d4_170fdbc630_zip_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_0_use_2_yarn_virtual_postcss_loader_virtual_77dab24057_0_cache_postcss_loader_npm_7_0_1_444ecd58b4_2a3cbcaaad_zip_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_0_use_3_yarn_virtual_less_loader_virtual_bb59c85985_0_cache_less_loader_npm_11_0_0_6dbfdb4abe_fe5f810549_zip_node_modules_less_loader_dist_cjs_js_ruleSet_1_rules_0_use_4_pluginSetupWizard_less__WEBPACK_IMPORTED_MODULE_6___default().locals) : undefined);
+
 
 /***/ })
 
@@ -3976,8 +4146,8 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, [216], function() { return __webpack_require__(1926); })
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(789); })
+/******/ 	__webpack_require__.O(undefined, [216], function() { return __webpack_require__(6664); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], function() { return __webpack_require__(4856); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

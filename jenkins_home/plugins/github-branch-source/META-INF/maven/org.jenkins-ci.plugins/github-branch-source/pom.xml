@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jenkins-ci.plugins</groupId>
   <artifactId>github-branch-source</artifactId>
-  <version>1656.v77eddb_b_e95df</version>
+  <version>1687.v7618247e672d</version>
   <packaging>hpi</packaging>
   <name>GitHub Branch Source Plugin</name>
   <description>Multibranch projects and organization folders from GitHub. Maintained by CloudBees, Inc.</description>
@@ -19,7 +19,7 @@
   <scm>
     <connection>scm:git:https://github.com/jenkinsci/github-branch-source-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/github-branch-source-plugin.git</developerConnection>
-    <tag>77eddbbe95df74dfccd19195717730b27bb4fa59</tag>
+    <tag>7618247e672d2008fa8dc006ee8e87f4e64ab2c4</tag>
     <url>https://github.com/jenkinsci/github-branch-source-plugin</url>
   </scm>
   <distributionManagement>
@@ -48,31 +48,31 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>credentials</artifactId>
-      <version>1087.v16065d268466</version>
+      <version>1139.veb_9579fca_33b_</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-support</artifactId>
-      <version>817.v58126df57338</version>
+      <version>833.va_1c71061486b_</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>jjwt-api</artifactId>
-      <version>0.11.2-9.c8b45b8bb173</version>
+      <version>0.11.5-77.v646c772fddb_0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>okhttp-api</artifactId>
-      <version>4.9.2-20211102</version>
+      <version>4.9.3-108.v0feda04578cf</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.main</groupId>
       <artifactId>jenkins-core</artifactId>
-      <version>2.332.1</version>
+      <version>2.346.1</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -97,7 +97,7 @@
     <dependency>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>animal-sniffer-annotations</artifactId>
-      <version>1.21</version>
+      <version>1.22</version>
       <scope>provided</scope>
       <optional>true</optional>
     </dependency>
@@ -119,13 +119,13 @@
       <plugin>
         <groupId>org.jenkins-ci.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>3.28</version>
+        <version>3.34</version>
         <extensions>true</extensions>
       </plugin>
       <plugin>
         <groupId>org.kohsuke.stapler</groupId>
         <artifactId>maven-stapler-plugin</artifactId>
-        <version>1.17</version>
+        <version>1.19</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
