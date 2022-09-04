@@ -2,7 +2,10 @@ FROM ubuntu
 
 # Install openssh-server
 
-RUN apt update && apt install openssh-server sudo -y
+RUN apt update && \
+    apt install openssh-server sudo -y && \ 
+    apt-get install python3-pip -y
+    
 
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 remote_user
 
@@ -23,6 +26,10 @@ RUN chown remote_user -R /home/remote_user/.ssh/  && \
     chmod 600 /home/remote_user/.ssh/authorized_keys
 
 RUN ssh-keygen -A
+
+RUN apt update -y && apt install mysql-server -y && apt install curl -y
+
+RUN pip install awscli --upgrade
 
 CMD ["/usr/sbin/sshd","-D"]
 

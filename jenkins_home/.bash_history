@@ -40,3 +40,28 @@ exit
 ssh -i remote-key remote_user@remote_host
 exit
 exit
+ansible
+exit
+cd $HOME
+ls ansible/
+ls
+exit
+cd $HOME
+cd ansible/
+ls
+cp ../ubuntu/remote-key .
+exit
+cd $HOME
+cd ansible/
+ls
+cat hosts 
+ping remote_host
+ansible -i hosts -m ping devel_1
+ansible -i hosts -m ping devel_1
+clear
+clear
+clear
+ansible -i hosts -m ping devel_1
+ansible -i hosts -m ping devel_1
+clear
+exit
