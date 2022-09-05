@@ -1,12 +1,24 @@
-Started at Sun Sep 04 13:47:28 WIB 2022
+Started at Mon Sep 05 09:35:47 UTC 2022
 Processing my-first-job
 Offering my-first-job to Project Build Discarder
+Processing pipeline
+Offering pipeline to Project Build Discarder
 Processing remote-task
 Offering remote-task to Project Build Discarder
-Finished at Sun Sep 04 13:47:28 WIB 2022. 4ms
-Started at Sun Sep 04 14:47:28 WIB 2022
+Finished at Mon Sep 05 09:35:47 UTC 2022. 4ms
+Started at Mon Sep 05 10:35:47 UTC 2022
 Processing my-first-job
 Offering my-first-job to Project Build Discarder
+Processing pipeline
+Offering pipeline to Project Build Discarder
 Processing remote-task
 Offering remote-task to Project Build Discarder
-Finished at Sun Sep 04 14:47:28 WIB 2022. 2ms
+Finished at Mon Sep 05 10:35:47 UTC 2022. 1ms
+Started at Mon Sep 05 11:35:47 UTC 2022
+Processing my-first-job
+Offering my-first-job to Project Build Discarder
+Processing pipeline
+Offering pipeline to Project Build Discarder
+Processing remote-task
+Offering remote-task to Project Build Discarder
+Finished at Mon Sep 05 11:35:47 UTC 2022. 1ms
