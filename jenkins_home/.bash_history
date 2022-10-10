@@ -65,3 +65,6 @@ ansible -i hosts -m ping devel_1
 ansible -i hosts -m ping devel_1
 clear
 exit
+docker ps
+docker image ls
+exit
