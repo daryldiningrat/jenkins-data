@@ -1,64 +1,8 @@
-Started at Sun Oct 09 12:25:49 UTC 2022
+Started at Wed Oct 12 10:22:17 UTC 2022
 Processing my-first-job
 Offering my-first-job to Project Build Discarder
 Processing pipeline
 Offering pipeline to Project Build Discarder
 Processing remote-task
 Offering remote-task to Project Build Discarder
-Finished at Sun Oct 09 12:25:49 UTC 2022. 2ms
-Started at Sun Oct 09 13:25:49 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Sun Oct 09 13:25:49 UTC 2022. 2ms
-Started at Sun Oct 09 14:25:49 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Sun Oct 09 14:25:49 UTC 2022. 0ms
-Started at Sun Oct 09 15:25:49 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Sun Oct 09 15:25:49 UTC 2022. 1ms
-Started at Sun Oct 09 16:25:49 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Sun Oct 09 16:25:49 UTC 2022. 2ms
-Started at Mon Oct 10 00:57:42 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Mon Oct 10 00:57:42 UTC 2022. 2ms
-Started at Mon Oct 10 01:57:42 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Mon Oct 10 01:57:42 UTC 2022. 0ms
-Started at Mon Oct 10 02:57:42 UTC 2022
-Processing my-first-job
-Offering my-first-job to Project Build Discarder
-Processing pipeline
-Offering pipeline to Project Build Discarder
-Processing remote-task
-Offering remote-task to Project Build Discarder
-Finished at Mon Oct 10 02:57:42 UTC 2022. 2ms
+Finished at Wed Oct 12 10:22:17 UTC 2022. 10ms
